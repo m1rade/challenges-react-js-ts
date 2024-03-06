@@ -1,34 +1,35 @@
-import { MouseEvent, useState } from 'react';
+import { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
 
 const messages = ['Learn React ⚛️', 'Apply for jobs 💼', 'Invest your new income 🤑'];
 
 function App() {
   const [close, setClose] = useState(false);
+  const [step, setStep] = useState(1);
 
-  const handleCloseClick = () => setClose(!close);
+  const handleCloseClick = () => setClose(cl => !cl);
 
   return (
     <>
-      <div onClick={handleCloseClick} className="close">
-        [ X ]
-      </div>
-      {!close && <Steps />}
+      <button onClick={handleCloseClick} className="close">
+        &times;
+      </button>
+      {!close && <Steps step={step} onChange={setStep} />}
     </>
   );
 }
 
-function Steps() {
-  const [step, setStep] = useState(1);
-
+type PropsType = {
+  step: number;
+  onChange: Dispatch<SetStateAction<number>>;
+};
+function Steps({ step, onChange }: PropsType) {
   const handleStepClick = (e: MouseEvent<HTMLButtonElement>) => {
-    console.log(e.currentTarget.innerHTML);
-
     switch (e.currentTarget.innerHTML) {
       case 'Previous':
-        setStep(s => (s > 1 ? s - 1 : s));
+        onChange(s => (s > 1 ? s - 1 : s));
         break;
       case 'Next':
-        setStep(s => (s < 3 ? s + 1 : s));
+        onChange(s => (s < 3 ? s + 1 : s));
         break;
     }
   };
