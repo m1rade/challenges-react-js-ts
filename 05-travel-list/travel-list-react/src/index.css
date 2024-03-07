@@ -131,5 +131,28 @@ input[type="checkbox"] {
   padding: 2.4rem 0;
   font-size: 2rem;
   font-weight: 700;
-  font-style: italic;
+}
+
+.form-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.form-input input.error {
+  background: #ffbeb3;
+  border: 3px solid #f11;
+  margin: 0;
+}
+
+.form-input input {
+  margin: 0.3rem;
+}
+
+.form-input span {
+  font-size: 1.8rem;
+  color: #030303;
+  position: absolute;
+  bottom: -2.4rem;
 }
