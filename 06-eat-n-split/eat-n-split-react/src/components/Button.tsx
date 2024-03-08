@@ -1,3 +1,3 @@
-export function Button({ children }: { children: React.ReactNode }) {
-  return <button className="btn">{children}</button>;
+export function Button({ children, onClick }: { children: React.ReactNode, onClick?: () => void }) {
+  return <button onClick={onClick} className="btn">{children}</button>;
 }
