@@ -48,18 +48,16 @@ body {
 }
 
 .app {
+  min-height: 66vh;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  width: 90%;
-  margin: 0 auto;
+  grid-template-columns: 34fr 44fr;
+  align-items: start;
   column-gap: 4rem;
 }
 
 .sidebar {
-  width: 75%;
   justify-self: end;
   font-size: 1.4rem;
-  grid-row: span 2;
 }
 
 .sidebar>ul {
@@ -72,7 +70,7 @@ body {
 .sidebar>ul>li {
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
-  column-gap: 0.2rem;
+  column-gap: 1.6rem;
   padding: 0.8rem 1.2rem;
   margin-bottom: 0.8rem;
 }
@@ -156,7 +154,7 @@ form .btn {
 }
 
 .form-add-friend {
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 1.5fr;
   padding: 1.6rem;
   margin: 1.6rem 0;
 }
@@ -167,8 +165,7 @@ form .btn {
 }
 
 .form-split-bill {
-  width: 80%;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 16rem;
   padding: 3.2rem;
 }
 
