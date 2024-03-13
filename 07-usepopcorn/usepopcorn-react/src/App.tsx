@@ -1,7 +1,38 @@
 import { useState } from 'react';
-import { Button } from './components/Button';
+import { ListContainer } from './components/ListContainer';
+import { MovieList } from './components/MovieList';
+import { Navbar, NumResults } from './components/Navbar';
+import { WatchedSummary } from './components/WatchedSummary';
 
-const tempMovieData = [
+function App() {
+  const [movies, setMovies] = useState(tempMovieData);
+  const [watchedMovies, setWatchedMovies] = useState(tempWatchedData);
+
+  return (
+    <>
+      <Navbar>
+        <NumResults num={movies.length} />
+      </Navbar>
+      <MainContent>
+        <ListContainer>
+          <MovieList movies={movies} />
+        </ListContainer>
+        <ListContainer>
+          <WatchedSummary watched={watchedMovies} />
+          <MovieList movies={watchedMovies} />
+        </ListContainer>
+      </MainContent>
+    </>
+  );
+}
+
+export default App;
+
+function MainContent({ children }: { children?: React.ReactNode }) {
+  return <main className="main">{children}</main>;
+}
+
+export const tempMovieData = [
   {
     imdbID: 'tt1375666',
     Title: 'Inception',
@@ -24,7 +55,7 @@ const tempMovieData = [
   },
 ];
 
-const tempWatchedData = [
+export const tempWatchedData = [
   {
     imdbID: 'tt1375666',
     Title: 'Inception',
@@ -46,116 +77,5 @@ const tempWatchedData = [
   },
 ];
 
-const calAverage = <T extends number>(arr: T[]) => arr.reduce((acc, cur, _, arr) => acc + cur / arr.length, 0);
-
-function App() {
-  const [searchIsOpen, setSearchIsOpen] = useState(true);
-  const [watchedIsOpen, setWatchedIsOpen] = useState(true);
-  const [query, setQuery] = useState('');
-
-  const averImdbRating = calAverage(tempWatchedData.map(w => w.imdbRating));
-  const averUserRating = calAverage(tempWatchedData.map(w => w.userRating));
-  const averRuntime = calAverage(tempWatchedData.map(w => w.runtime));
-
-  return (
-    <>
-      <nav className="navbar">
-        <ul>
-          <li className="logo">
-            <span role="img">🍿</span>
-            <h1>usePopcorn</h1>
-          </li>
-          <li className="search">
-            <input
-              type="text"
-              placeholder="Search movies..."
-              value={query}
-              onChange={e => setQuery(e.currentTarget.value)}
-            />
-          </li>
-          <li className="num-results">
-            <p>
-              Found <b>{tempMovieData.length}</b> movies
-            </p>
-          </li>
-        </ul>
-      </nav>
-
-      <main className="main">
-        <div className="container">
-          <Button onClick={() => setSearchIsOpen(o => !o)}>{searchIsOpen ? '–' : '+'}</Button>
-
-          {searchIsOpen && (
-            <ul className="movie-list">
-              {tempMovieData.map(m => (
-                <li key={m.imdbID}>
-                  <img src={m.Poster} alt={`${m.Title} poster`} />
-                  <h3>{m.Title}</h3>
-                  <div className="movie-info">
-                    <p>
-                      <span>📅</span>
-                      <span>{m.Year}</span>
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="container">
-          <Button onClick={() => setWatchedIsOpen(o => !o)}>{watchedIsOpen ? '–' : '+'}</Button>
-
-          <div className="summary">
-            <h2>Movies you watched</h2>
-            <div className="movie-info">
-              <p>
-                <span>🔢</span>
-                <span>{tempWatchedData.length} movies</span>
-              </p>
-              <p>
-                <span>⭐️</span>
-                <span>{averImdbRating}</span>
-              </p>
-              <p>
-                <span>🌟</span>
-                <span>{averUserRating}</span>
-              </p>
-              <p>
-                <span>⏳</span>
-                <span>{averRuntime} min</span>
-              </p>
-            </div>
-          </div>
-
-          {watchedIsOpen && (
-            <ul className="movie-list">
-              {tempWatchedData.map(m => (
-                <li key={m.imdbID}>
-                  <img src={m.Poster} alt={`${m.Title} poster`} />
-                  <h3>{m.Title}</h3>
-                  <div className="movie-info">
-                    <p>
-                      <span>⭐️</span>
-                      <span>{m.imdbRating}</span>
-                    </p>
-                    <p>
-                      <span>🌟</span>
-                      <span>{m.userRating}</span>
-                    </p>
-                    <p>
-                      <span>⏳</span>
-                      <span>{m.runtime}</span>
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </main>
-    </>
-  );
-}
-
-export default App;
+export type MovieDataType = (typeof tempMovieData)[0];
+export type WatchedMovieType = (typeof tempWatchedData)[0];
