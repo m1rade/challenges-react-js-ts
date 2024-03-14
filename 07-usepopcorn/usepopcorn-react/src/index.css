@@ -197,3 +197,12 @@ ul {
 .summary p {
   font-size: 1.6rem;
 }
+
+/* ------------------- */
+.loader {
+  font-size: 3rem;
+  font-weight: 500;
+  height: 100%;
+  text-align: center;
+  padding: 8rem 0;
+}

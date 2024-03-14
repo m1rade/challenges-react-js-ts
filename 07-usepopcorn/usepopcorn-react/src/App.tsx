@@ -1,12 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ListContainer } from './components/ListContainer';
+import { Loader } from './components/Loader';
 import { MovieList } from './components/MovieList';
 import { Navbar, NumResults } from './components/Navbar';
 import { WatchedSummary } from './components/WatchedSummary';
+import { MovieDataType, WatchedMovieType } from './movieData';
+
+const API_KEY = 'b931a86e';
 
 function App() {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watchedMovies, setWatchedMovies] = useState(tempWatchedData);
+  const [movies, setMovies] = useState<MovieDataType[]>([]);
+  const [watchedMovies, setWatchedMovies] = useState<WatchedMovieType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const getMovies = async () => {
+      setIsLoading(true);
+
+      const resp = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=guardians&page=1`);
+      const data: ISucceedResponse = await resp.json();
+      setMovies(data.Search);
+
+      setIsLoading(false);
+    };
+
+    getMovies();
+  }, []);
 
   return (
     <>
@@ -14,9 +33,7 @@ function App() {
         <NumResults num={movies.length} />
       </Navbar>
       <MainContent>
-        <ListContainer>
-          <MovieList movies={movies} />
-        </ListContainer>
+        <ListContainer>{isLoading ? <Loader /> : <MovieList movies={movies} />}</ListContainer>
         <ListContainer>
           <WatchedSummary watched={watchedMovies} />
           <MovieList movies={watchedMovies} />
@@ -32,50 +49,13 @@ function MainContent({ children }: { children?: React.ReactNode }) {
   return <main className="main">{children}</main>;
 }
 
-export const tempMovieData = [
-  {
-    imdbID: 'tt1375666',
-    Title: 'Inception',
-    Year: '2010',
-    Poster: 'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg',
-  },
-  {
-    imdbID: 'tt0133093',
-    Title: 'The Matrix',
-    Year: '1999',
-    Poster:
-      'https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg',
-  },
-  {
-    imdbID: 'tt6751668',
-    Title: 'Parasite',
-    Year: '2019',
-    Poster:
-      'https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg',
-  },
-];
-
-export const tempWatchedData = [
-  {
-    imdbID: 'tt1375666',
-    Title: 'Inception',
-    Year: '2010',
-    Poster: 'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg',
-    runtime: 148,
-    imdbRating: 8.8,
-    userRating: 10,
-  },
-  {
-    imdbID: 'tt0088763',
-    Title: 'Back to the Future',
-    Year: '1985',
-    Poster:
-      'https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg',
-    runtime: 116,
-    imdbRating: 8.5,
-    userRating: 9,
-  },
-];
-
-export type MovieDataType = (typeof tempMovieData)[0];
-export type WatchedMovieType = (typeof tempWatchedData)[0];
+type ResponseType = 'True' | 'False';
+interface ISucceedResponse {
+  Response: ResponseType;
+  Search: MovieDataType[];
+  totalResults: string;
+}
+interface IFailedResponse {
+  Response: ResponseType;
+  Error: string;
+}
