@@ -6,7 +6,9 @@ export function ListContainer({ children }: { children?: React.ReactNode }) {
 
   return (
     <div className="container">
-      <Button onClick={() => setOpen(o => !o)}>{open ? '–' : '+'}</Button>
+      <Button className="toggle-btn" onClick={() => setOpen(o => !o)}>
+        {open ? '–' : '+'}
+      </Button>
 
       {open && children}
     </div>

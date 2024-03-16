@@ -45,3 +45,4 @@ export const tempWatchedData = [
 
 export type MovieDataType = (typeof tempMovieData)[0];
 export type WatchedMovieType = (typeof tempWatchedData)[0];
+export type MovieListType = MovieDataType | WatchedMovieType;

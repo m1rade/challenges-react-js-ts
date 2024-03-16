@@ -11,9 +11,9 @@ const starContainer = {
 };
 /* ------------- */
 
-interface StarRatingProps {
+export interface StarRatingProps {
   maxRating?: number;
-  defaultValue?: number;
+  defaultRating?: number;
   color?: string;
   size?: number;
   className?: string;
@@ -21,13 +21,13 @@ interface StarRatingProps {
 }
 export function StarRating({
   maxRating = 5,
-  defaultValue = 0,
+  defaultRating = 0,
   color = '#fcc419',
   size = 32,
   className = '',
   onSetRating,
 }: StarRatingProps) {
-  const [rating, setRating] = useState(defaultValue);
+  const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(0);
 
   const ratingNum = {

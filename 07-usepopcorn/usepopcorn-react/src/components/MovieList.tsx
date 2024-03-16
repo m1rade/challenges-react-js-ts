@@ -1,12 +1,17 @@
-import { MovieDataType, WatchedMovieType } from '../App';
-import { Movie } from './Movie';
+import { MovieListType } from '../movieData';
+import { MovieSm } from './MovieSm';
 
-export function MovieList({ movies }: { movies?: MovieDataType[] | WatchedMovieType[] }) {
+export type MovieListPropsType = {
+  movies?: MovieListType | MovieListType[];
+  onSelect?: (id: string) => void;
+  onDelete?: (id: string) => void;
+};
+export function MovieList({ movies, onSelect, onDelete }: MovieListPropsType) {
   return (
     <ul className="movie-list">
-      {movies?.map(m => (
-        <Movie key={m.imdbID} movie={m} />
-      ))}
+      {movies &&
+        Array.isArray(movies) &&
+        movies.map(m => <MovieSm key={m.imdbID} movies={m} onSelect={onSelect} onDelete={onDelete} />)}
     </ul>
   );
 }
