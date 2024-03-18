@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ErrorMessage } from './components/ErrorMessage';
 import { ListContainer } from './components/ListContainer';
 import { Loader } from './components/Loader';
@@ -13,7 +13,10 @@ export const API_KEY = 'b931a86e';
 
 function App() {
   const [movies, setMovies] = useState<MovieDataType[]>([]);
-  const [watchedMovies, setWatchedMovies] = useState<WatchedMovieType[]>([]);
+  const [watchedMovies, setWatchedMovies] = useState<WatchedMovieType[]>(() => {
+    const watched = localStorage.getItem('watchedMovies');
+    return watched ? JSON.parse(watched) : [];
+  });
 
   const [selectedID, setSelectedID] = useState<string | null>(null);
 
@@ -74,6 +77,10 @@ function App() {
 
   const handleChangeUserRating = (rating: number, movieID: string) =>
     setWatchedMovies(watched => watched.map(w => (w.imdbID === movieID ? { ...w, userRating: rating } : w)));
+
+  useEffect(() => {
+    localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
+  }, [watchedMovies]);
 
   return (
     <>

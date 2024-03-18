@@ -32,6 +32,30 @@ export function MovieInfo({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const handleAddWatchedMovie = () => {
+    if (!onAddWatchedMovie || !movie) return;
+
+    const numRuntime = parseInt(movie.Runtime.split(' ')[0]);
+    const newWatchedMovie: WatchedMovieType = {
+      imdbID: movie.imdbID,
+      imdbRating: Number(movie.imdbRating),
+      Poster: movie.Poster,
+      Title: movie.Title,
+      Year: movie.Year,
+      runtime: isNaN(numRuntime) ? 0 : numRuntime,
+      userRating,
+    };
+
+    onAddWatchedMovie(newWatchedMovie);
+  };
+
+  const handleOnSetRating = (rating: number) => {
+    if (isListed && watchedMovie) {
+      onChangeUserRating && onChangeUserRating(rating, watchedMovie.imdbID);
+    }
+    setUserRating(rating);
+  };
+
   useEffect(() => {
     const getMovieById = async () => {
       try {
@@ -91,30 +115,6 @@ export function MovieInfo({
       document.removeEventListener('keydown', listenForEscape);
     };
   }, [onClose]);
-
-  const handleAddWatchedMovie = () => {
-    if (!onAddWatchedMovie || !movie) return;
-
-    const numRuntime = parseInt(movie.Runtime.split(' ')[0]);
-    const newWatchedMovie: WatchedMovieType = {
-      imdbID: movie.imdbID,
-      imdbRating: Number(movie.imdbRating),
-      Poster: movie.Poster,
-      Title: movie.Title,
-      Year: movie.Year,
-      runtime: isNaN(numRuntime) ? 0 : numRuntime,
-      userRating,
-    };
-
-    onAddWatchedMovie(newWatchedMovie);
-  };
-
-  const handleOnSetRating = (rating: number) => {
-    if (isListed && watchedMovie) {
-      onChangeUserRating && onChangeUserRating(rating, watchedMovie.imdbID);
-    }
-    setUserRating(rating);
-  };
 
   return (
     <>
