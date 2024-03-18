@@ -1,4 +1,4 @@
-import { WatchedMovieType } from '../App';
+import { WatchedMovieType } from '../movieData';
 import { calAverage } from '../utils/calcAverage';
 
 export function WatchedSummary({ watched }: { watched: WatchedMovieType[] }) {

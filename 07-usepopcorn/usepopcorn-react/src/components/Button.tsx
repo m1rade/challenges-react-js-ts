@@ -1,3 +1,5 @@
+import { MouseEventHandler } from 'react';
+
 export function Button({
   onClick,
   children,
@@ -7,7 +9,10 @@ export function Button({
   children: React.ReactNode;
   className: string;
 }) {
-  const handleOnClick = () => onClick();
+  const handleOnClick: MouseEventHandler<HTMLButtonElement> = e => {
+    e.stopPropagation();
+    onClick();
+  };
 
   return (
     <button onClick={handleOnClick} className={className}>

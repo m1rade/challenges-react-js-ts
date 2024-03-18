@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ErrorMessage } from './components/ErrorMessage';
 import { ListContainer } from './components/ListContainer';
 import { Loader } from './components/Loader';
@@ -15,13 +15,12 @@ function App() {
   const [movies, setMovies] = useState<MovieDataType[]>([]);
   const [watchedMovies, setWatchedMovies] = useState<WatchedMovieType[]>([]);
 
-  const [query, setQuery] = useState('');
   const [selectedID, setSelectedID] = useState<string | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
+  const handleOnSearch = (query: string) => {
     const getMovies = async () => {
       try {
         setIsLoading(true);
@@ -57,8 +56,9 @@ function App() {
       return;
     }
 
+    handleCloseSelectedMovie();
     getMovies();
-  }, [query]);
+  };
 
   const handleSelectMovie = (movieID: string) => setSelectedID(selectedID => (selectedID === movieID ? null : movieID));
 
@@ -66,13 +66,19 @@ function App() {
 
   const handleAddWatchedMovie = (movie: WatchedMovieType) => setWatchedMovies(watched => [...watched, movie]);
 
-  const handleDeleteWatched = (movieID: string) =>
-    setWatchedMovies(watched => watched.filter(w => w.imdbID !== movieID));
+  const handleDeleteWatched = (movieID: string) => {
+    if (window.confirm('🛑 Remove movie from your watched list?')) {
+      setWatchedMovies(watched => watched.filter(w => w.imdbID !== movieID));
+    }
+  };
+
+  const handleChangeUserRating = (rating: number, movieID: string) =>
+    setWatchedMovies(watched => watched.map(w => (w.imdbID === movieID ? { ...w, userRating: rating } : w)));
 
   return (
     <>
       <Navbar>
-        <Search onSearch={setQuery} />
+        <Search onSearch={handleOnSearch} />
         <NumResults num={movies.length} />
       </Navbar>
       <MainContent>
@@ -87,6 +93,7 @@ function App() {
               movieID={selectedID}
               watchedMovies={watchedMovies}
               onAddWatchedMovie={handleAddWatchedMovie}
+              onChangeUserRating={handleChangeUserRating}
               onClose={handleCloseSelectedMovie}
             />
           ) : (

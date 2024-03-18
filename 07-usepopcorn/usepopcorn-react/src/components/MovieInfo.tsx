@@ -13,17 +13,21 @@ export function MovieInfo({
   watchedMovies,
   onClose,
   onAddWatchedMovie,
+  onChangeUserRating,
 }: {
   movieID: string;
   watchedMovies: WatchedMovieType[];
   onClose: () => void;
   onAddWatchedMovie?: (movie: WatchedMovieType) => void;
+  onChangeUserRating?: (rating: number, movieID: string) => void;
 }) {
   const [movie, setMovie] = useState<IMovie | null>(null);
   const [userRating, setUserRating] = useState(0);
-  const [isListed, setIsListed] = useState(false);
+  const isListed = watchedMovies.map(w => w.imdbID).includes(movieID);
+  const watchedMovie = watchedMovies.find(w => w.imdbID === movieID);
+
   const maxRating = 10;
-  const starSize = 24;
+  const starSize = 25;
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -34,7 +38,6 @@ export function MovieInfo({
         setIsLoading(true);
         setError('');
         setMovie(null);
-        setIsListed(false);
         setUserRating(0);
 
         const resp = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&i=${movieID}`);
@@ -50,10 +53,8 @@ export function MovieInfo({
           results = data as IMovie;
           setMovie(results);
 
-          const isMovieWatched = watchedMovies.find(w => w.imdbID === movieID);
-          if (isMovieWatched) {
-            setUserRating(isMovieWatched.userRating);
-            setIsListed(true);
+          if (watchedMovie) {
+            setUserRating(watchedMovie.userRating);
           }
         }
       } catch (error) {
@@ -77,21 +78,42 @@ export function MovieInfo({
     };
   }, [movie]);
 
+  useEffect(() => {
+    function listenForEscape(e: KeyboardEvent) {
+      if (e.code === 'Escape') {
+        onClose();
+      }
+    }
+
+    document.addEventListener('keydown', listenForEscape);
+
+    return () => {
+      document.removeEventListener('keydown', listenForEscape);
+    };
+  }, [onClose]);
+
   const handleAddWatchedMovie = () => {
     if (!onAddWatchedMovie || !movie) return;
 
+    const numRuntime = parseInt(movie.Runtime.split(' ')[0]);
     const newWatchedMovie: WatchedMovieType = {
       imdbID: movie.imdbID,
       imdbRating: Number(movie.imdbRating),
       Poster: movie.Poster,
       Title: movie.Title,
       Year: movie.Year,
-      runtime: Number(movie.Runtime.split(' ')[0]),
+      runtime: isNaN(numRuntime) ? 0 : numRuntime,
       userRating,
     };
 
     onAddWatchedMovie(newWatchedMovie);
-    setIsListed(true);
+  };
+
+  const handleOnSetRating = (rating: number) => {
+    if (isListed && watchedMovie) {
+      onChangeUserRating && onChangeUserRating(rating, watchedMovie.imdbID);
+    }
+    setUserRating(rating);
   };
 
   return (
@@ -110,22 +132,22 @@ export function MovieInfo({
                     maxRating={maxRating}
                     defaultRating={userRating}
                     size={starSize}
-                    onSetRating={setUserRating}
+                    onSetRating={handleOnSetRating}
                   />
                   {userRating > 0 && (
-                    <Button className={`add-btn ${isListed ? 'listed' : ''}`} onClick={handleAddWatchedMovie}>
-                      {isListed ? 'Listed' : '+ Add to watched list'}
+                    <Button className="add-btn" onClick={handleAddWatchedMovie}>
+                      + Add to watched list
                     </Button>
                   )}
                 </>
               ) : (
                 <>
-                  <p>You rated movie with 🌟{userRating}&nbsp;</p>
+                  <p>Your rating is 🌟{userRating}&nbsp;</p>
                   <StarRating
                     maxRating={maxRating}
                     defaultRating={userRating}
                     size={starSize}
-                    onSetRating={setUserRating}
+                    onSetRating={handleOnSetRating}
                   />
                 </>
               )}

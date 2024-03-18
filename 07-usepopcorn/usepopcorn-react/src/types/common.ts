@@ -7,7 +7,7 @@ export interface IServerResponse {
 }
 export interface ISucceedResponse extends IServerResponse {
   Search: MovieDataType[];
-  TotalResults: string;
+  totalResults: string;
 }
 export interface IFailedResponse extends IServerResponse {
   Error: string;
