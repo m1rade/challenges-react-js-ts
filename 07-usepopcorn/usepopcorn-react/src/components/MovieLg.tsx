@@ -5,13 +5,18 @@ export function MovieLg({ movie, children }: { movie: IMovie; children?: React.R
     <article className="details">
       <header>
         <img src={movie.Poster} alt={`${movie.Title} poster`} />
-        <div>
+        <div className="title-container">
           <h2>{movie.Title}</h2>
-          <p>
-            {movie.Year} &bull; {movie.Rated} &bull; {movie.Runtime}
-          </p>
+          <ul className="show--dividers">
+            <li>{movie.Year}</li>
+            <li>{movie.Rated}</li>
+            <li>{movie.Runtime}</li>
+          </ul>
           <p>{movie.Genre}</p>
-          <p>⭐&nbsp;IMDB:{movie.imdbRating}</p>
+          <ul>
+            <li>⭐&nbsp;IMDB:</li>
+            <li>{movie.imdbRating}</li>
+          </ul>
           <p>{movie.Country}</p>
         </div>
       </header>
@@ -19,15 +24,15 @@ export function MovieLg({ movie, children }: { movie: IMovie; children?: React.R
       <section>
         <p>
           <span>Director:</span>
-          {movie.Director}
+          <span>{movie.Director}</span>
         </p>
         <p>
           <span>Writers:</span>
-          {movie.Writer}
+          <span>{movie.Writer}</span>
         </p>
         <p>
-          <span>Cast:</span>
-          {movie.Actors}
+          <span>Stars:</span>
+          <span>{movie.Actors}</span>
         </p>
         <p>
           <em>{movie.Plot}</em>
