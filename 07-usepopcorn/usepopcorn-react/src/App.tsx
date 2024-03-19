@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ErrorMessage } from './components/ErrorMessage';
 import { ListContainer } from './components/ListContainer';
 import { Loader } from './components/Loader';
@@ -6,66 +6,22 @@ import { MovieInfo } from './components/MovieInfo';
 import { MovieList } from './components/MovieList';
 import { Navbar, NumResults, Search } from './components/Navbar';
 import { WatchedSummary } from './components/WatchedSummary';
-import { MovieDataType, WatchedMovieType } from './movieData';
-import { IFailedResponse, IServerResponse, ISucceedResponse } from './types/common';
-
-export const API_KEY = 'b931a86e';
+import { useFetchMovies } from './hooks/useFetchMovies';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { WatchedMovieType } from './movieData';
 
 function App() {
-  const [movies, setMovies] = useState<MovieDataType[]>([]);
-  const [watchedMovies, setWatchedMovies] = useState<WatchedMovieType[]>(() => {
-    const watched = localStorage.getItem('watchedMovies');
-    return watched ? JSON.parse(watched) : [];
-  });
+  const [watchedMovies, setWatchedMovies] = useLocalStorage<WatchedMovieType[]>([], 'watchedMovies');
 
   const [selectedID, setSelectedID] = useState<string | null>(null);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleOnSearch = (query: string) => {
-    const getMovies = async () => {
-      try {
-        setIsLoading(true);
-        setMovies([]);
-        setError('');
-
-        const resp = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${query}&page=1`);
-        if (!resp.ok) {
-          throw new Error('Cannot get movies from API');
-        }
-
-        const data: IServerResponse = await resp.json();
-
-        let results;
-        if (data.Response === 'False') {
-          results = data as IFailedResponse;
-          throw new Error(results.Error);
-        } else {
-          results = data as ISucceedResponse;
-          setMovies(results.Search);
-        }
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (!query.length) {
-      setError('');
-      return;
-    }
-
-    handleCloseSelectedMovie();
-    getMovies();
-  };
+  const [query, setQuery] = useState('');
+  const { movies, isLoading, error } = useFetchMovies(query, handleCloseSelectedMovie);
 
   const handleSelectMovie = (movieID: string) => setSelectedID(selectedID => (selectedID === movieID ? null : movieID));
 
-  const handleCloseSelectedMovie = () => setSelectedID(null);
+  function handleCloseSelectedMovie() {
+    setSelectedID(null);
+  }
 
   const handleAddWatchedMovie = (movie: WatchedMovieType) => setWatchedMovies(watched => [...watched, movie]);
 
@@ -78,14 +34,10 @@ function App() {
   const handleChangeUserRating = (rating: number, movieID: string) =>
     setWatchedMovies(watched => watched.map(w => (w.imdbID === movieID ? { ...w, userRating: rating } : w)));
 
-  useEffect(() => {
-    localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
-  }, [watchedMovies]);
-
   return (
     <>
       <Navbar>
-        <Search onSearch={handleOnSearch} />
+        <Search onSearch={setQuery} />
         <NumResults num={movies.length} />
       </Navbar>
       <MainContent>

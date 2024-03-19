@@ -1,4 +1,6 @@
-import { KeyboardEvent, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useDebounce } from '../hooks/useDebounce';
+import { useListenKey } from '../hooks/useListenKey';
 
 export function Navbar({ children }: { children?: React.ReactNode }) {
   return (
@@ -22,17 +24,20 @@ function Logo() {
 
 export function Search({ onSearch }: { onSearch: (query: string) => void }) {
   const [query, setQuery] = useState('');
+  const debouncedQuery = useDebounce(query, 1000);
+  const inputEl = useRef<HTMLInputElement>(null);
 
-  // debouncing search query
   useEffect(() => {
-    const id = setTimeout(() => {
-      onSearch(query.trim());
-    }, 1000);
+    onSearch(debouncedQuery);
+  }, [debouncedQuery]);
 
-    return () => clearTimeout(id);
-  }, [query]);
+  useListenKey('Enter', () => {
+    if (document.activeElement === inputEl.current) return;
 
-  const handleSubmitSearch = (e: KeyboardEvent<HTMLInputElement>) => {
+    inputEl.current?.focus();
+  });
+
+  const handleSubmitSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       onSearch(query.trim());
     }
@@ -41,6 +46,7 @@ export function Search({ onSearch }: { onSearch: (query: string) => void }) {
   return (
     <li className="search">
       <input
+        ref={inputEl}
         type="text"
         placeholder="Search movies..."
         value={query}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { API_KEY } from '../App';
+import { API_KEY } from '../hooks/useFetchMovies';
 import { WatchedMovieType } from '../movieData';
 import { IFailedResponse, IMovie, IServerResponse } from '../types/common';
 import { Button } from './Button';
@@ -7,6 +7,7 @@ import { ErrorMessage } from './ErrorMessage';
 import { Loader } from './Loader';
 import { MovieLg } from './MovieLg';
 import { StarRating } from './StarRating';
+import { useListenKey } from '../hooks/useListenKey';
 
 export function MovieInfo({
   movieID,
@@ -102,19 +103,7 @@ export function MovieInfo({
     };
   }, [movie]);
 
-  useEffect(() => {
-    function listenForEscape(e: KeyboardEvent) {
-      if (e.code === 'Escape') {
-        onClose();
-      }
-    }
-
-    document.addEventListener('keydown', listenForEscape);
-
-    return () => {
-      document.removeEventListener('keydown', listenForEscape);
-    };
-  }, [onClose]);
+  useListenKey('Escape', onClose);
 
   return (
     <>
