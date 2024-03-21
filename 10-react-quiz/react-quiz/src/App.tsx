@@ -21,7 +21,7 @@ const initialState = {
   answer: null as number | null,
   userPoints: 0,
   highScore: 0,
-  remainingTime: 225,
+  remainingTime: 0,
 };
 const secondsPerQuestion = 15;
 
@@ -59,6 +59,7 @@ function reducer(state: StateType, action: AppActionType): StateType {
         questions: state.questions,
         status: 'Active',
         highScore: state.highScore,
+        remainingTime: state.questions.length * secondsPerQuestion,
       };
     case 'TIMER':
       return {
