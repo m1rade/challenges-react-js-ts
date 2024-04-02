@@ -1,4 +1,4 @@
-import { Description, Heading2, Page, Picture, SectionContainer } from '../ui/PageComponents';
+import { Description, Heading2, Page, Picture, SectionContainer } from '../ui/common/PageComponents';
 
 export function Product() {
   return (

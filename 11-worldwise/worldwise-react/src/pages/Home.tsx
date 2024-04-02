@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
-import { CtaButton } from '../ui/Buttons';
-import { Nav } from '../ui/Nav';
-import { MainContainer } from '../ui/PageComponents';
+import { ROUTES } from '../App';
+import { CtaButton } from '../ui/common/Buttons';
+import { Nav } from '../ui/common/Nav';
+import { MainContainer } from '../ui/common/PageComponents';
 
 const Homepage = styled(MainContainer)`
   height: calc(100vh - 5rem);
@@ -35,6 +36,7 @@ const HomeHeading = styled.h1`
       font-size: 1.8rem;
       color: var(--color-light--1);
       margin-bottom: 2.4rem;
+      width: 60%;
     `}
 `;
 
@@ -52,7 +54,7 @@ export function Home() {
           A world map that tracks your footsteps into every city you can think of. Never forget your forget your
           wonderful experiences, and show your friends how you have wandered the world.
         </HomeHeading>
-        <CtaButton to="/login">Start tracking now</CtaButton>
+        <CtaButton to={ROUTES.login}>Start tracking now</CtaButton>
       </Section>
     </Homepage>
   );

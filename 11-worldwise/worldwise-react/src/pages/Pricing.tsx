@@ -1,5 +1,6 @@
-import { CtaButton } from '../ui/Buttons';
-import { Description, Heading2, Page, Picture, SectionContainer } from '../ui/PageComponents';
+import { ROUTES } from '../App';
+import { CtaButton } from '../ui/common/Buttons';
+import { Description, Heading2, Page, Picture, SectionContainer } from '../ui/common/PageComponents';
 
 export function Pricing() {
   return (
@@ -15,7 +16,7 @@ export function Pricing() {
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae vel labore mollitia iusto. Recusandae quos
             provident, laboriosam fugit voluptatem iste.
           </Description>
-          <CtaButton to="/login" $margins="margin-top: 2rem;">
+          <CtaButton to={ROUTES.login} $margins="margin-top: 2rem;">
             Start tracking now
           </CtaButton>
         </div>

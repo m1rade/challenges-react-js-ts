@@ -1,16 +1,25 @@
-import { useState } from 'react';
-import { Field, Form, FormContainer } from '../ui/FormComponents';
-import { Page } from '../ui/PageComponents';
-import { Button } from '../ui/Buttons';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../App';
+import { Button } from '../ui/common/Buttons';
+import { Field, Form, FormContainer } from '../ui/common/FormComponents';
+import { Page } from '../ui/common/PageComponents';
 
 export function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('example@mail.net');
+  const [password, setPassword] = useState('1234');
+  const navigate = useNavigate();
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = e => {
+    e.preventDefault();
+
+    navigate(ROUTES.map);
+  };
 
   return (
     <Page>
       <FormContainer>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Field
             inputName="email"
             labelName="Email address"

@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 export const Button = styled.button<{
-  $type?: 'primary' | 'back' | 'position';
+  $type?: 'primary' | 'back' | 'position' | 'delete';
 }>`
   cursor: pointer;
   border: none;
@@ -39,6 +39,22 @@ export const Button = styled.button<{
           background-color: var(--color-brand--2);
           color: var(--color-dark--1);
           box-shadow: 0 0.4rem 1.2rem rgba(36, 42, 46, 0.16);
+        `;
+      case 'delete':
+        return css`
+          padding: 0;
+          height: 2rem;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          background-color: var(--color-dark--1);
+          color: var(--color-light--2);
+          font-weight: 400;
+          transition: all 0.2s;
+
+          &:hover {
+            background-color: var(--color-brand--1);
+            color: var(--color-dark--1);
+          }
         `;
       default:
         return '';

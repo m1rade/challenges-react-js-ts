@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { ROUTES } from '../../App';
 import { CtaButton } from './Buttons';
+import Logo from './Logo';
 
 const Navbar = styled.nav`
   width: 100%;
@@ -13,16 +15,15 @@ const Navbar = styled.nav`
   }
 `;
 
-const Logo = styled.img`
-  height: 5.2rem;
-`;
-
 const StyledNavLink = styled(NavLink)`
-  text-decoration: none;
-  color: inherit;
-  font-size: 1.6rem;
-  font-weight: 600;
-  text-transform: uppercase;
+  &:link,
+  &:visited {
+    text-decoration: none;
+    color: inherit;
+    font-size: 1.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
 
   &.active {
     color: var(--color-brand--2);
@@ -39,17 +40,17 @@ export function Nav() {
       <ul>
         <li>
           <NavLink to="/">
-            <Logo src="logo.png" alt="world wise logo" />
+            <Logo />
           </NavLink>
         </li>
         <li>
-          <StyledNavLink to="/pricing">Pricing</StyledNavLink>
+          <StyledNavLink to={ROUTES.pricing}>Pricing</StyledNavLink>
         </li>
         <li>
-          <StyledNavLink to="/product">Product</StyledNavLink>
+          <StyledNavLink to={ROUTES.product}>Product</StyledNavLink>
         </li>
         <li>
-          <LoginButton to="/login">Log in</LoginButton>
+          <LoginButton to={ROUTES.login}>Log in</LoginButton>
         </li>
       </ul>
     </Navbar>
