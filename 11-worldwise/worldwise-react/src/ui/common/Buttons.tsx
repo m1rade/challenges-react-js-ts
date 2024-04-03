@@ -1,4 +1,5 @@
-import { NavLink } from 'react-router-dom';
+import React from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 export const Button = styled.button<{
@@ -74,3 +75,18 @@ export const CtaButton = styled(NavLink)<{ $margins?: string }>`
   padding: 1rem 3rem;
   ${props => props.$margins}
 `;
+
+export function BackButton({ children }: { children: React.ReactNode }) {
+  const navigate = useNavigate();
+
+  return (
+    <Button
+      $type="back"
+      onClick={e => {
+        e.preventDefault();
+        navigate(-1);
+      }}>
+      {children}
+    </Button>
+  );
+}

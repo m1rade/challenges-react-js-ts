@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ICity } from '../../../types/data';
+import { useCitiesContext } from '../../../contexts/CitiesContext';
+import { CityType } from '../../../types/data';
 import { formatDate } from '../../../utils/formatDate';
 import { Button } from '../../common/Buttons';
 import { Message } from '../../common/Message';
@@ -25,12 +26,17 @@ const StyledCityItem = styled(SidebarItem)`
 `;
 
 type CityItemProps = {
-  city: ICity;
+  city: CityType;
 };
 function CityItem({ city: { emoji, cityName, date, id, position } }: CityItemProps) {
+  const { currentCity } = useCitiesContext();
   return (
     <li>
-      <StyledCityItem as={Link} to={`${id}?lat=${position.lat}&lng=${position.lng}`} $type="cities">
+      <StyledCityItem
+        as={Link}
+        to={`${id}?lat=${position.lat}&lng=${position.lng}`}
+        $type="cities"
+        className={`${currentCity?.id === id ? 'active' : ''}`}>
         <span>{emoji}</span>
         <h3>{cityName}</h3>
         <time>{formatDate(date, navigator.language)}</time>
@@ -40,11 +46,9 @@ function CityItem({ city: { emoji, cityName, date, id, position } }: CityItemPro
   );
 }
 
-export type CitiesProps = {
-  cities: ICity[];
-  isLoading: boolean;
-};
-export function Cities({ cities, isLoading }: CitiesProps) {
+export function Cities() {
+  const { cities, isLoading } = useCitiesContext();
+
   if (isLoading) return <Spinner />;
 
   if (!cities.length) return <Message message="Add your first city by clicking on a city on the map" />;

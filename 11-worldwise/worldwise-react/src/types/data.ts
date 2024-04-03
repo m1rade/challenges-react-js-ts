@@ -3,7 +3,7 @@ export interface IPosition {
   lng: number;
 }
 
-export interface ICity {
+export interface CityType {
   cityName: string;
   country: string;
   emoji: string;

@@ -1,6 +1,6 @@
+import { useCitiesContext } from '../../../contexts/CitiesContext';
 import { Message } from '../../common/Message';
 import { Spinner } from '../../common/Spinner';
-import { CitiesProps } from './CitiesComponents';
 import { SidebarItem } from './SidebarItem';
 import { SidebarList } from './SidebarList';
 
@@ -13,7 +13,9 @@ function CountryItem({ country }: CountryItemProps) {
   );
 }
 
-export function Countries({ cities, isLoading = false }: CitiesProps) {
+export function Countries() {
+  const { cities, isLoading } = useCitiesContext();
+
   if (isLoading) return <Spinner />;
 
   if (!cities.length) return <Message message="Add your first city by clicking on a city on the map" />;

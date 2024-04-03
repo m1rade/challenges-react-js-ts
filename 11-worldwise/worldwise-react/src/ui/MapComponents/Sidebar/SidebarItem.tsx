@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { SidebarItemType } from './SidebarList';
 
-export const SidebarItem = styled.li<{ $type: SidebarItemType }>`
+export const SidebarItem = styled.li<{ $type: SidebarItemType; $color?: string }>`
   color: inherit;
   text-decoration: none;
   background-color: var(--color-dark--2);
@@ -46,4 +46,9 @@ export const SidebarItem = styled.li<{ $type: SidebarItemType }>`
         return '';
     }
   }};
+
+  &.active {
+    border: 2px solid ${props => (props.$type === 'cities' ? 'var(--color-brand--2)' : 'var(--color-brand--1)')};
+    border-left: 5px solid ${props => (props.$type === 'cities' ? 'var(--color-brand--2)' : 'var(--color-brand--1)')};
+  }
 `;
