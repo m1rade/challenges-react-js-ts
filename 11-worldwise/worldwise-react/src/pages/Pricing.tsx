@@ -16,7 +16,7 @@ export function Pricing() {
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae vel labore mollitia iusto. Recusandae quos
             provident, laboriosam fugit voluptatem iste.
           </Description>
-          <CtaButton to={ROUTES.login} $margins="margin-top: 2rem;">
+          <CtaButton to={`/${ROUTES.login}`} $margins="margin-top: 2rem;">
             Start tracking now
           </CtaButton>
         </div>

@@ -13,7 +13,7 @@ export function Login() {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
 
-    navigate(ROUTES.map);
+    navigate(`/${ROUTES.map}`);
   };
 
   return (

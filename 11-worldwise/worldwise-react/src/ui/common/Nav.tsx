@@ -44,13 +44,13 @@ export function Nav() {
           </NavLink>
         </li>
         <li>
-          <StyledNavLink to={ROUTES.pricing}>Pricing</StyledNavLink>
+          <StyledNavLink to={`/${ROUTES.pricing}`}>Pricing</StyledNavLink>
         </li>
         <li>
-          <StyledNavLink to={ROUTES.product}>Product</StyledNavLink>
+          <StyledNavLink to={`/${ROUTES.product}`}>Product</StyledNavLink>
         </li>
         <li>
-          <LoginButton to={ROUTES.login}>Log in</LoginButton>
+          <LoginButton to={`/${ROUTES.login}`}>Log in</LoginButton>
         </li>
       </ul>
     </Navbar>

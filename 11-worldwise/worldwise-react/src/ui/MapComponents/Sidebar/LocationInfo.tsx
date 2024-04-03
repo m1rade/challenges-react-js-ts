@@ -58,7 +58,7 @@ export function LocationInfo({ city }: { city?: ICity }) {
   return (
     <Container>
       <Row>
-        <h6>Berlin {id}</h6>
+        <h6>City name {id}</h6>
         <h3>
           <span>😎</span>Berlin
           <span>{lat}</span>

@@ -54,7 +54,7 @@ export function Home() {
           A world map that tracks your footsteps into every city you can think of. Never forget your forget your
           wonderful experiences, and show your friends how you have wandered the world.
         </HomeHeading>
-        <CtaButton to={ROUTES.login}>Start tracking now</CtaButton>
+        <CtaButton to={`/${ROUTES.login}`}>Start tracking now</CtaButton>
       </Section>
     </Homepage>
   );

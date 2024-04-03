@@ -65,7 +65,7 @@ function App() {
             <Route path={ROUTES.countries} element={<Countries cities={cities} isLoading={isLoading} />} />
             <Route path={ROUTES.form} element={<SidebarForm />} />
           </Route>
-          <Route path={ROUTES.form} element={<Page404 />} />
+          <Route path={ROUTES.page404} element={<Page404 />} />
         </Routes>
       </BrowserRouter>
     </>
