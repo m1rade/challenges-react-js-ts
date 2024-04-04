@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const FormContainer = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ export const Label = styled.label`
   font-weight: 600;
 `;
 
-export const Input = styled.input`
+const BaseTextField = css`
   width: 100%;
   padding: 0.8rem 1.2rem;
   font-family: inherit;
@@ -38,15 +38,41 @@ export const Input = styled.input`
   }
 `;
 
-interface FieldPropsType extends React.InputHTMLAttributes<HTMLInputElement> {
+export const Input = styled.input`
+  ${BaseTextField};
+`;
+
+export const Textarea = styled.textarea`
+  ${BaseTextField};
+
+  min-height: 12rem;
+  resize: none;
+  overflow-y: auto;
+`;
+
+interface FieldPropsType<T extends 'input' | 'textarea'> {
   inputName: string;
   labelName: string;
+  fieldType?: T;
 }
-export function Field({ inputName, labelName, name, ...inputProps }: FieldPropsType) {
+interface InputPropsType extends FieldPropsType<'input'>, React.InputHTMLAttributes<HTMLInputElement> {}
+interface TextareaPropsType extends FieldPropsType<'textarea'>, React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+
+export function Field({
+  name,
+  inputName,
+  labelName,
+  fieldType = 'input',
+  ...props
+}: InputPropsType | TextareaPropsType) {
   return (
     <div>
       <Label htmlFor={inputName}>{labelName}</Label>
-      <Input id={inputName} name={inputName} {...inputProps} />
+      {fieldType === 'textarea' ? (
+        <Textarea id={inputName} name={inputName} {...(props as TextareaPropsType)} />
+      ) : (
+        <Input id={inputName} name={inputName} {...(props as InputPropsType)} />
+      )}
     </div>
   );
 }

@@ -11,7 +11,8 @@ export function SidebarForm() {
   return (
     <Form>
       <Field inputName="city" labelName="City name" />
-      <Field inputName="country" labelName="Country name" />
+      <Field inputName="date" labelName="When did you go to?" />
+      <Field inputName="notes" labelName="Notes about your trip to" fieldType="textarea" />
       <BtnContainer>
         <BackButton>&larr; Back</BackButton>
         <Button $type="primary">Submit</Button>
