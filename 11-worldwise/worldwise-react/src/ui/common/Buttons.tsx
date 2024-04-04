@@ -35,8 +35,7 @@ export const Button = styled.button<{
           z-index: 1000;
           font-size: 1.4rem;
           bottom: 4rem;
-          left: 50%;
-          transform: translateX(-50%);
+          left: 1rem;
           background-color: var(--color-brand--2);
           color: var(--color-dark--1);
           box-shadow: 0 0.4rem 1.2rem rgba(36, 42, 46, 0.16);
@@ -60,7 +59,7 @@ export const Button = styled.button<{
       default:
         return '';
     }
-  }}
+  }};
 `;
 
 export const CtaButton = styled(NavLink)<{ $margins?: string }>`
@@ -76,7 +75,7 @@ export const CtaButton = styled(NavLink)<{ $margins?: string }>`
   ${props => props.$margins}
 `;
 
-export function BackButton({ children }: { children: React.ReactNode }) {
+export function BackButton({ children, to }: { children: React.ReactNode; to?: string }) {
   const navigate = useNavigate();
 
   return (
@@ -84,7 +83,7 @@ export function BackButton({ children }: { children: React.ReactNode }) {
       $type="back"
       onClick={e => {
         e.preventDefault();
-        navigate(-1);
+        to ? navigate(to) : navigate(-1);
       }}>
       {children}
     </Button>

@@ -5,10 +5,13 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { ROUTES } from '../../../App';
 import { useCitiesContext } from '../../../contexts/CitiesContext';
+import { useGeolocation } from '../../../hooks/useGeolocation';
+import { Button } from '../../common/Buttons';
 
 const Container = styled.div`
   height: 100%;
   background-color: var(--color-dark--2);
+  position: relative;
 
   & .map {
     height: 100%;
@@ -18,6 +21,7 @@ const Container = styled.div`
 export function Map() {
   const [mapPosition, setMapPosition] = useState<[number, number]>([51.505, -0.09]);
   const { cities } = useCitiesContext();
+  const { getPosition, position, isLoading: isLoadingPosition, error } = useGeolocation();
 
   const [searchParams] = useSearchParams();
   const lat = Number(searchParams.get('lat'));
@@ -26,6 +30,10 @@ export function Map() {
   useEffect(() => {
     if (lat && lng) setMapPosition([lat, lng]);
   }, [lat, lng]);
+
+  useEffect(() => {
+    if (position) setMapPosition([position.lat, position.lng]);
+  }, [position]);
 
   return (
     <Container>
@@ -45,6 +53,9 @@ export function Map() {
         <ChangeCenter position={mapPosition} />
         <DetectClick />
       </MapContainer>
+      <Button $type="position" onClick={getPosition}>
+        {isLoadingPosition ? 'Getting location...' : error ? "Can't access" : '🔍'}
+      </Button>
     </Container>
   );
 }
@@ -57,6 +68,6 @@ function ChangeCenter({ position }: { position: LatLngExpression }) {
 
 function DetectClick() {
   const navigate = useNavigate();
-  useMapEvent('click', () => navigate(ROUTES.form));
+  useMapEvent('click', e => navigate(`${ROUTES.form}?lat=${e.latlng.lat}&lng=${e.latlng.lng}`));
   return null;
 }
