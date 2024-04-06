@@ -83,6 +83,18 @@
         "lat": 52.81817820264537,
         "lng": -8.085937500000002
       }
+    },
+    {
+      "id": "18bd",
+      "cityName": "Beaulon",
+      "country": "France",
+      "emoji": "🇫🇷",
+      "date": "Sun Apr 07 2024 00:03:04 GMT+0300 (Moscow Standard Time)",
+      "notes": "Let's go France!!",
+      "position": {
+        "lat": 46.585517531652194,
+        "lng": 3.6474609375000004
+      }
     }
   ]
 }

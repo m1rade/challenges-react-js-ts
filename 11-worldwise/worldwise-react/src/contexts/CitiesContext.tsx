@@ -1,30 +1,35 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import { CityType } from '../types/data';
 import { sleep } from '../utils/sleep';
+import { citiesReducer } from './citiesReducer';
 
 const BASE_URL = 'http://localhost:5172';
 
 const CitiesContext = createContext<CitiesContextType | null>(null);
 
+export const initState = {
+  cities: [] as CityType[],
+  isLoading: false,
+  error: '',
+  currentCity: null as CityType | null,
+};
+
 function CitiesProvider({ children }: { children: React.ReactNode }) {
-  const [cities, setCities] = useState<CityType[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentCity, setCurrentCity] = useState<CityType | null>(null);
+  const [{ cities, isLoading, currentCity, error }, dispatch] = useReducer(citiesReducer, initState);
 
   useEffect(() => {
     async function fetchCities() {
-      try {
-        setIsLoading(true);
+      dispatch({ type: 'cities/loading' });
 
+      try {
         const resp = await fetch(`${BASE_URL}/cities`);
         const data = await resp.json();
         await sleep(1000);
 
-        setCities(data);
+        dispatch({ type: 'cities/loaded', payload: data });
       } catch (error) {
         console.error('Some error');
-      } finally {
-        setIsLoading(false);
+        dispatch({ type: 'cities/rejected', payload: 'Some error when fetching data' });
       }
     }
 
@@ -32,25 +37,26 @@ function CitiesProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   async function getCityInfoById(id: string) {
-    try {
-      setIsLoading(true);
+    if (id === currentCity?.id) return;
 
+    dispatch({ type: 'cities/loading' });
+
+    try {
       const resp = await fetch(`${BASE_URL}/cities/${id}`);
       const data = await resp.json();
       await sleep(1000);
 
-      setCurrentCity(data);
+      dispatch({ type: 'cities/currentCity/loaded', payload: data });
     } catch (error) {
       console.error('Some error');
-    } finally {
-      setIsLoading(false);
+      dispatch({ type: 'cities/rejected', payload: 'Some error when getting city information' });
     }
   }
 
   async function createCity(newCity: CreateCityType) {
-    try {
-      setIsLoading(true);
+    dispatch({ type: 'cities/loading' });
 
+    try {
       const resp = await fetch(`${BASE_URL}/cities`, {
         method: 'POST',
         body: JSON.stringify(newCity),
@@ -61,18 +67,16 @@ function CitiesProvider({ children }: { children: React.ReactNode }) {
       const data = await resp.json();
       await sleep(1000);
 
-      console.log(data);
-      setCities(cities => [...cities, data]);
+      dispatch({ type: 'city/created', payload: data });
     } catch (error) {
       console.error('Some error');
-    } finally {
-      setIsLoading(false);
+      dispatch({ type: 'cities/rejected', payload: 'Some error when creating a city' });
     }
   }
 
   async function deleteCity(id: string) {
     try {
-      setIsLoading(true);
+      dispatch({ type: 'cities/loading' });
 
       await fetch(`${BASE_URL}/cities/${id}`, {
         method: 'DELETE',
@@ -80,16 +84,15 @@ function CitiesProvider({ children }: { children: React.ReactNode }) {
 
       await sleep(1000);
 
-      setCities(cities => cities.filter(c => c.id !== id));
+      dispatch({ type: 'city/deleted', payload: id });
     } catch (error) {
       console.error('Some error');
-    } finally {
-      setIsLoading(false);
+      dispatch({ type: 'cities/rejected', payload: 'Some error when deleting a city' });
     }
   }
 
   return (
-    <CitiesContext.Provider value={{ cities, isLoading, currentCity, getCityInfoById, createCity, deleteCity }}>
+    <CitiesContext.Provider value={{ cities, isLoading, currentCity, error, getCityInfoById, createCity, deleteCity }}>
       {children}
     </CitiesContext.Provider>
   );
@@ -104,11 +107,10 @@ function useCitiesContext() {
 export { CitiesProvider, useCitiesContext };
 
 export type CreateCityType = Omit<CityType, 'id'>;
-interface CitiesContextType {
-  cities: CityType[];
-  isLoading: boolean;
-  currentCity: CityType | null;
+interface CitiesContextType extends Partial<InitStateType> {
   getCityInfoById: (id: string) => Promise<void>;
   createCity: (newCity: CreateCityType) => Promise<void>;
   deleteCity(id: string): Promise<void>;
 }
+
+export type InitStateType = typeof initState;
