@@ -29,7 +29,13 @@ type CityItemProps = {
   city: CityType;
 };
 function CityItem({ city: { emoji, cityName, date, id, position } }: CityItemProps) {
-  const { currentCity } = useCitiesContext();
+  const { currentCity, deleteCity } = useCitiesContext();
+
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = e => {
+    e.preventDefault();
+    deleteCity(id);
+  };
+
   return (
     <li>
       <StyledCityItem
@@ -40,7 +46,9 @@ function CityItem({ city: { emoji, cityName, date, id, position } }: CityItemPro
         <span>{emoji}</span>
         <h3>{cityName}</h3>
         <time>{formatDate(date, navigator.language)}</time>
-        <Button $type="delete">&times;</Button>
+        <Button $type="delete" onClick={handleClick}>
+          &times;
+        </Button>
       </StyledCityItem>
     </li>
   );

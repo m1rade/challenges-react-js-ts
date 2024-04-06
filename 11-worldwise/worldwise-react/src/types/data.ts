@@ -10,5 +10,5 @@ export interface CityType {
   date: string;
   notes: string;
   position: IPosition;
-  id: number;
+  id: string;
 }

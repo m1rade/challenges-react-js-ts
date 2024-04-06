@@ -1,10 +1,11 @@
 import { useCitiesContext } from '../../../contexts/CitiesContext';
+import { ICountry, toUniqueCountries } from '../../../utils/toUniqueCountries';
 import { Message } from '../../common/Message';
 import { Spinner } from '../../common/Spinner';
 import { SidebarItem } from './SidebarItem';
 import { SidebarList } from './SidebarList';
 
-function CountryItem({ country }: CountryItemProps) {
+function CountryItem({ country }: { country: ICountry }) {
   return (
     <SidebarItem $type="countries">
       <span>{country.emoji}</span>
@@ -20,10 +21,7 @@ export function Countries() {
 
   if (!cities.length) return <Message message="Add your first city by clicking on a city on the map" />;
 
-  const countries: ICountry[] = cities.reduce((arr: ICountry[], cur) => {
-    if (arr.map(el => el.country).includes(cur.country)) return arr;
-    else return [...arr, { id: cur.id, emoji: cur.emoji, country: cur.country }];
-  }, []);
+  const countries = toUniqueCountries(cities, 'country');
 
   return (
     <SidebarList $type="countries">
@@ -33,12 +31,3 @@ export function Countries() {
     </SidebarList>
   );
 }
-
-interface ICountry {
-  id: number;
-  emoji: string;
-  country: string;
-}
-type CountryItemProps = {
-  country: ICountry;
-};

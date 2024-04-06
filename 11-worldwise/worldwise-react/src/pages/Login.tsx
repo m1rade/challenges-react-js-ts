@@ -24,14 +24,14 @@ export function Login() {
             inputName="email"
             labelName="Email address"
             value={email}
-            onChange={e => setEmail(e.currentTarget.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.currentTarget.value)}
           />
           <Field
             inputName="password"
             labelName="Password"
             type="password"
             value={password}
-            onChange={e => setPassword(e.currentTarget.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.currentTarget.value)}
           />
           <div style={{ textAlign: 'end' }}>
             <Button $type="primary">Login</Button>

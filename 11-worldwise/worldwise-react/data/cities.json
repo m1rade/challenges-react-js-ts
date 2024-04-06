@@ -10,7 +10,7 @@
         "lat": 38.727881642324164,
         "lng": -9.140900099907554
       },
-      "id": 73930385
+      "id": "73930385"
     },
     {
       "cityName": "Madrid",
@@ -22,7 +22,7 @@
         "lat": 40.46635901755316,
         "lng": -3.7133789062500004
       },
-      "id": 17806751
+      "id": "17806751"
     },
     {
       "cityName": "Berlin",
@@ -34,7 +34,7 @@
         "lat": 52.53586782505711,
         "lng": 13.376933665713324
       },
-      "id": 98443197
+      "id": "98443197"
     },
     {
       "cityName": "Munich",
@@ -46,7 +46,43 @@
         "lat": 48.1375,
         "lng": 11.575
       },
-      "id": 9844319712
+      "id": "9844319712"
+    },
+    {
+      "id": "e1dc",
+      "cityName": "Greater Manchester",
+      "country": "United Kingdom of Great Britain and Northern Ireland (the)",
+      "notes": "great place",
+      "emoji": "🇬🇧",
+      "date": "Fri Apr 05 2024 04:02:58 GMT+0300 (Moscow Standard Time)",
+      "position": {
+        "lat": 53.50177320737292,
+        "lng": -2.1862792968750004
+      }
+    },
+    {
+      "id": "e14a",
+      "cityName": "Dublin",
+      "country": "Ireland",
+      "emoji": "🇮🇪",
+      "date": "Fri Apr 05 2024 04:36:59 GMT+0300 (Moscow Standard Time)",
+      "notes": "Irish Rover",
+      "position": {
+        "lat": 53.35223168641462,
+        "lng": -6.262207031250001
+      }
+    },
+    {
+      "id": "7dcd",
+      "cityName": "Newport",
+      "country": "Ireland",
+      "emoji": "🇮🇪",
+      "date": "Fri Apr 05 2024 04:45:47 GMT+0300 (Moscow Standard Time)",
+      "notes": "Some place",
+      "position": {
+        "lat": 52.81817820264537,
+        "lng": -8.085937500000002
+      }
     }
   ]
 }

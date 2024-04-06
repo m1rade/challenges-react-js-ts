@@ -1,4 +1,6 @@
 import React from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import styled, { css } from 'styled-components';
 
 export const FormContainer = styled.div`
@@ -8,13 +10,20 @@ export const FormContainer = styled.div`
   margin: 8rem auto;
 `;
 
-export const Form = styled.form`
+export const Form = styled.form<{ $isLoading?: boolean }>`
   background-color: var(--color-dark--2);
   border-radius: 0.7rem;
   padding: 2rem 3rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  position: relative;
+
+  ${props =>
+    props.$isLoading &&
+    css`
+      opacity: 0.3;
+    `};
 `;
 
 export const Label = styled.label`
@@ -48,6 +57,10 @@ export const Textarea = styled.textarea`
   min-height: 12rem;
   resize: none;
   overflow-y: auto;
+`;
+
+export const StyledDatePicker = styled(DatePicker)`
+  ${BaseTextField};
 `;
 
 interface FieldPropsType<T extends 'input' | 'textarea'> {
