@@ -6,7 +6,7 @@ import { MainContainer } from '../ui/common/PageComponents';
 
 const Homepage = styled(MainContainer)`
   height: calc(100vh - 5rem);
-  background-image: linear-gradient(rgba(36, 42, 46, 0.8), rgba(36, 42, 46, 0.8)), url('../bg.jpg');
+  background-image: linear-gradient(rgba(36, 42, 46, 0.8), rgba(36, 42, 46, 0.8)), url('/bg.jpg');
   background-size: cover;
   background-position: center;
   background-color: unset;

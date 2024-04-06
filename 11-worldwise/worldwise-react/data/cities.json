@@ -95,6 +95,18 @@
         "lat": 46.585517531652194,
         "lng": 3.6474609375000004
       }
+    },
+    {
+      "id": "094a",
+      "cityName": "Rome",
+      "country": "Italy",
+      "emoji": "🇮🇹",
+      "date": "Sun Apr 07 2024 02:12:31 GMT+0300 (Moscow Standard Time)",
+      "notes": "The most tasteful pizza!!!",
+      "position": {
+        "lat": 41.92244801477309,
+        "lng": 12.645263671875002
+      }
     }
   ]
 }

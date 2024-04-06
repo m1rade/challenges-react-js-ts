@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 export const Button = styled.button<{
-  $type?: 'primary' | 'back' | 'position' | 'delete';
+  $type?: 'primary' | 'back' | 'position' | 'delete' | 'secondary';
 }>`
   cursor: pointer;
   border: none;
@@ -30,6 +30,12 @@ export const Button = styled.button<{
           font-weight: 700;
           background-color: var(--color-brand--2);
           color: var(--color-dark--1);
+        `;
+      case 'secondary':
+        return css`
+          background-color: var(--color-dark--2);
+          font-weight: 700;
+          color: inherit;
         `;
       case 'back':
         return css`

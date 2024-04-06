@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useReducer } from 'react';
+import React, { createContext, useEffect, useReducer } from 'react';
+import { useCustomContext } from '../hooks/useCustomContext';
 import { CityType } from '../types/data';
 import { sleep } from '../utils/sleep';
 import { citiesReducer } from './citiesReducer';
@@ -98,16 +99,12 @@ function CitiesProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-function useCitiesContext() {
-  const context = useContext(CitiesContext);
-  if (!context) throw new Error('useCitiesContext hook has has to be used within <CitiesProvider>');
-  return context;
-}
+const useCitiesContext = () => useCustomContext(CitiesContext);
 
 export { CitiesProvider, useCitiesContext };
 
 export type CreateCityType = Omit<CityType, 'id'>;
-interface CitiesContextType extends Partial<InitStateType> {
+interface CitiesContextType extends InitStateType {
   getCityInfoById: (id: string) => Promise<void>;
   createCity: (newCity: CreateCityType) => Promise<void>;
   deleteCity(id: string): Promise<void>;

@@ -1,7 +1,7 @@
-import { ActionsType } from '../types/actions';
-import { InitStateType } from './CitiesContext';
+import { CitiesActionsType } from '../types/cities-actions';
+import { InitStateType, initState } from './CitiesContext';
 
-export function citiesReducer(state: InitStateType, action: ActionsType): InitStateType {
+export function citiesReducer(state: InitStateType = initState, action: CitiesActionsType): InitStateType {
   switch (action.type) {
     case 'cities/loading':
       return { ...state, isLoading: true, error: '' };

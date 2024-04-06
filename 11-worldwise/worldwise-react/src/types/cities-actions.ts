@@ -36,7 +36,7 @@ interface CitiesRejectedAction {
   payload: string;
 }
 
-export type ActionsType =
+export type CitiesActionsType =
   | CitiesSetLoadingAction
   | CitiesLoadedAction
   | CurrentCityLoadedAction
