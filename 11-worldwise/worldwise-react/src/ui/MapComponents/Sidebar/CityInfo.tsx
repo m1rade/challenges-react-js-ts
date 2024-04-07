@@ -58,7 +58,7 @@ export function CityInfo() {
 
   useEffect(() => {
     if (id) getCityInfoById(id);
-  }, [id]);
+  }, [id, getCityInfoById]);
 
   if (isLoading) return <Spinner />;
 

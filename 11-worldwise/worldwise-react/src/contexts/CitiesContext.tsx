@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useReducer } from 'react';
+import React, { createContext, useCallback, useEffect, useReducer } from 'react';
 import { useCustomContext } from '../hooks/useCustomContext';
 import { CityType } from '../types/data';
 import { sleep } from '../utils/sleep';
@@ -37,22 +37,25 @@ function CitiesProvider({ children }: { children: React.ReactNode }) {
     fetchCities();
   }, []);
 
-  async function getCityInfoById(id: string) {
-    if (id === currentCity?.id) return;
+  const getCityInfoById = useCallback(
+    async function getCityInfoById(id: string) {
+      if (id === currentCity?.id) return;
 
-    dispatch({ type: 'cities/loading' });
+      dispatch({ type: 'cities/loading' });
 
-    try {
-      const resp = await fetch(`${BASE_URL}/cities/${id}`);
-      const data = await resp.json();
-      await sleep(1000);
+      try {
+        const resp = await fetch(`${BASE_URL}/cities/${id}`);
+        const data = await resp.json();
+        await sleep(1000);
 
-      dispatch({ type: 'cities/currentCity/loaded', payload: data });
-    } catch (error) {
-      console.error('Some error');
-      dispatch({ type: 'cities/rejected', payload: 'Some error when getting city information' });
-    }
-  }
+        dispatch({ type: 'cities/currentCity/loaded', payload: data });
+      } catch (error) {
+        console.error('Some error');
+        dispatch({ type: 'cities/rejected', payload: 'Some error when getting city information' });
+      }
+    },
+    [currentCity?.id]
+  );
 
   async function createCity(newCity: CreateCityType) {
     dispatch({ type: 'cities/loading' });
