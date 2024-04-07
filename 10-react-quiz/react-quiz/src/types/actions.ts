@@ -1,4 +1,4 @@
-import { AppStatusType, IQuestion } from './common';
+import { IQuestion } from './common';
 
 const DATA_RECEIVED = 'DATA_RECEIVED' as const;
 const DATA_FAILED = 'DATA_FAILED' as const;
@@ -7,7 +7,6 @@ const REGISTER_ANSWER = 'REGISTER_ANSWER' as const;
 const CHANGE_CURRENT_QUESTION = 'CHANGE_CURRENT_QUESTION' as const;
 const FINISH_QUIZ = 'FINISH_QUIZ' as const;
 const RESTART = 'RESTART' as const;
-const SET_STATUS = 'SET_STATUS' as const;
 const TIMER = 'TIMER' as const;
 
 interface RequestFailedAction {

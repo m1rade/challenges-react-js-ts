@@ -1,14 +1,8 @@
-export function ProgressBar({
-  index,
-  numQuestions,
-  userPoints,
-  points,
-}: {
-  index: number;
-  numQuestions: number;
-  userPoints: number;
-  points: number;
-}): React.JSX.Element {
+import { useQuizContext } from '../context/QuizContext';
+
+export function ProgressBar(): React.JSX.Element {
+  const { numQuestions, index, userPoints, maxPoints } = useQuizContext();
+
   return (
     <header className="progress-bar">
       <progress max={numQuestions} value={index + 1} />
@@ -16,7 +10,7 @@ export function ProgressBar({
         Question <strong>{index + 1}</strong>/{numQuestions}
       </p>
       <p className="points">
-        <strong>{userPoints}</strong>/{points}
+        <strong>{userPoints}</strong>/{maxPoints}
       </p>
     </header>
   );

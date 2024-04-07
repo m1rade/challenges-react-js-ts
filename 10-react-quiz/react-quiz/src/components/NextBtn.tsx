@@ -1,16 +1,8 @@
-import { AppActionType } from '../types/actions';
+import { useQuizContext } from '../context/QuizContext';
 
-export function NextBtn({
-  index,
-  dispatch,
-  numQuestions,
-  answer,
-}: {
-  index: number;
-  numQuestions: number;
-  dispatch: React.Dispatch<AppActionType>;
-  answer: number | null;
-}): React.JSX.Element | undefined {
+export function NextBtn(): React.JSX.Element | undefined {
+  const { answer, index, numQuestions, dispatch } = useQuizContext();
+
   if (answer === null) return <></>;
 
   if (index + 1 < numQuestions) {

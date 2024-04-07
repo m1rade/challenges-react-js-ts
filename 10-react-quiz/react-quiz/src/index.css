@@ -122,7 +122,8 @@ h4 {
 }
 
 .main {
-  width: 80%;
+  min-width: 52rem;
+  max-width: 70rem;
 }
 
 .start {

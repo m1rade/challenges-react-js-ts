@@ -1,13 +1,8 @@
 import { useEffect } from 'react';
-import { AppActionType } from '../types/actions';
+import { useQuizContext } from '../context/QuizContext';
 
-export function Timer({
-  dispatch,
-  remainingTime,
-}: {
-  remainingTime: number;
-  dispatch: React.Dispatch<AppActionType>;
-}): React.JSX.Element {
+export function Timer(): React.JSX.Element {
+  const { remainingTime, dispatch } = useQuizContext();
   const min = String(Math.trunc(remainingTime / 60)).padStart(2, '0');
   const sec = String(remainingTime % 60).padStart(2, '0');
 

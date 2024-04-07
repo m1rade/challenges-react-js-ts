@@ -1,16 +1,7 @@
-import { AppActionType } from '../types/actions';
+import { useQuizContext } from '../context/QuizContext';
 
-export function FinishScreen({
-  maxPoints,
-  userPoints,
-  highScore,
-  onRestart,
-}: {
-  userPoints: number;
-  maxPoints: number;
-  highScore: number;
-  onRestart: React.Dispatch<AppActionType>;
-}): React.JSX.Element {
+export function FinishScreen(): React.JSX.Element {
+  const { userPoints, maxPoints, highScore, dispatch } = useQuizContext();
   const percentage = Math.ceil((userPoints / maxPoints) * 100);
 
   let emoji;
@@ -26,7 +17,7 @@ export function FinishScreen({
         <span>{emoji}</span>You scored <strong>{userPoints}</strong> out of {maxPoints} ({percentage}%)
       </p>
       <p className="highscore">Highscore: {highScore} points</p>
-      <button className="btn btn-primary" onClick={() => onRestart({ type: 'RESTART' })}>
+      <button className="btn btn-primary" onClick={() => dispatch({ type: 'RESTART' })}>
         Restart
       </button>
     </>

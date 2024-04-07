@@ -1,16 +1,7 @@
-import { AppActionType } from '../types/actions';
+import { useQuizContext } from '../context/QuizContext';
 
-export function Options({
-  options,
-  dispatch,
-  answer,
-  correctOption,
-}: {
-  options: string[];
-  dispatch: React.Dispatch<AppActionType>;
-  answer: number | null;
-  correctOption: number;
-}): React.JSX.Element {
+export function Options({ options, correctOption }: { options: string[]; correctOption: number }): React.JSX.Element {
+  const { dispatch, answer } = useQuizContext();
   const hasAnswered = answer !== null;
 
   return (
