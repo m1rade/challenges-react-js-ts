@@ -39,11 +39,14 @@ export function Map() {
       <MapContainer center={mapPosition} zoom={7} className="map">
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {cities.map(city => {
           return (
-            <Marker key={city.id} position={city.position}>
+            <Marker
+              key={city.id}
+              position={city.position}
+              eventHandlers={{ click: () => setMapPosition([city.position.lat, city.position.lng]) }}>
               <Popup>{city.cityName}</Popup>
             </Marker>
           );
@@ -61,7 +64,7 @@ export function Map() {
 
 function ChangeCenter({ position }: { position: LatLngExpression }) {
   const map = useMap();
-  map.setView(position);
+  map.flyTo(position, map.getZoom());
   return null;
 }
 

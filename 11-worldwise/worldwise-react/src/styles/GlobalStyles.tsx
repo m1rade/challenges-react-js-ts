@@ -33,6 +33,30 @@ const GlobalStyles = createGlobalStyle`
   ul {
     list-style: none;
   }
+
+  /* Leaflet CSS */
+  .leaflet-popup .leaflet-popup-content-wrapper {
+    background-color: var(--color-dark--1);
+    color: var(--color-light--2);
+    border-radius: 0.5rem;
+    padding-right: 0.6rem;
+  }
+
+  .leaflet-popup .leaflet-popup-content {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .leaflet-popup .leaflet-popup-tip {
+    background-color: var(--color-dark--1);
+  }
+
+  .leaflet-popup-content-wrapper {
+    border-left: 5px solid var(--color-brand--2);
+  }
+  /* ----------- */
 `;
 
 export default GlobalStyles;
