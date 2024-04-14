@@ -1,4 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAppSlice } from '../../app/createAppSlice';
 
 export type AccountSliceState = typeof initialState;
 const initialState = {
@@ -8,42 +8,50 @@ const initialState = {
   isLoading: false,
 };
 
-const accountSlice = createSlice({
+const accountSlice = createAppSlice({
   name: 'account',
   initialState,
-  reducers: {
-    deposit(state, action: PayloadAction<number>) {
+  reducers: create => ({
+    deposit: create.reducer<number>((state, action) => {
       state.balance += action.payload;
-    },
-    withdraw(state, action: PayloadAction<number>) {
+    }),
+    withdraw: create.reducer<number>((state, action) => {
       state.balance -= action.payload;
-    },
-    requestLoan(state, action: PayloadAction<{ amount: number; loanPurpose: string }>) {
+    }),
+    requestLoan: create.reducer<{ amount: number; loanPurpose: string }>((state, action) => {
       if (state.loan > 0) return;
 
       state.loan = action.payload.amount;
       state.loanPurpose = action.payload.loanPurpose;
       state.balance += action.payload.amount;
-    },
-    payLoan(state) {
+    }),
+    payLoan: create.reducer(state => {
       state.balance -= state.loan;
       state.loan = 0;
       state.loanPurpose = '';
-    },
-  },
-  extraReducers: builder => {
-    builder
-      .addCase(depositWithConvertingCurrency.pending, state => {
-        state.isLoading = true;
-      })
-      .addCase(depositWithConvertingCurrency.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.balance += action.payload.rates.USD;
-      })
-      .addCase(depositWithConvertingCurrency.rejected, state => {
-        state.isLoading = false;
-      });
-  },
+    }),
+
+    // ================
+    depositWithConvertingCurrency: create.asyncThunk<ConvertingCurrencyResp, { amount: number; currency: string }>(
+      async ({ amount, currency }) => {
+        const resp = await fetch(`https://api.frankfurter.app/latest?amount=${amount}t&from=${currency}&to=USD`);
+
+        return (await resp.json()) as ConvertingCurrencyResp;
+      },
+      {
+        pending: state => {
+          state.isLoading = true;
+        },
+        rejected: state => {
+          state.isLoading = false;
+        },
+        fulfilled: (state, action) => {
+          state.isLoading = false;
+          state.balance += action.payload.rates.USD;
+        },
+      }
+    ),
+  }),
   selectors: {
     selectBalance: account => account.balance,
   },
@@ -51,7 +59,7 @@ const accountSlice = createSlice({
 
 export default accountSlice.reducer;
 
-export const { deposit, withdraw, payLoan, requestLoan } = accountSlice.actions;
+export const { deposit, withdraw, payLoan, requestLoan, depositWithConvertingCurrency } = accountSlice.actions;
 
 export const { selectBalance } = accountSlice.selectors;
 
@@ -60,11 +68,3 @@ interface ConvertingCurrencyResp {
     USD: number;
   };
 }
-export const depositWithConvertingCurrency = createAsyncThunk<
-  ConvertingCurrencyResp,
-  { amount: number; currency: string }
->('account/convertingCurrency', async ({ amount, currency }) => {
-  const resp = await fetch(`https://api.frankfurter.app/latest?amount=${amount}t&from=${currency}&to=USD`);
-
-  return (await resp.json()) as ConvertingCurrencyResp;
-});
