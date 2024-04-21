@@ -1,7 +1,7 @@
 {
   "root": true,
   "extends": ["eslint:recommended", "react-app", "plugin:react/jsx-runtime"],
-  "ignorePatterns": ["dist", ".eslintrc.cjs"],
+  "ignorePatterns": ["dist", ".eslintrc.cjs", "tailwind.config.js", "postcss.config.js"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": { "project": true, "tsconfigRootDir": "./" },
   "plugins": ["react-refresh", "@typescript-eslint"],

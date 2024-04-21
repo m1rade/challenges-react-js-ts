@@ -8,12 +8,12 @@ export function App() {
   const isLoading = navigation.state === 'loading';
 
   return (
-    <div className="layout">
+    <div className="relative grid h-[100dvh] grid-rows-[auto_1fr] border-b-8 border-b-yellow-500">
       {isLoading && <Spinner />}
 
       <Header />
 
-      <main>
+      <main className="overflow-y-scroll p-4 md:p-8">
         <Outlet />
       </main>
 
