@@ -8,9 +8,12 @@ export function Menu() {
   const menu = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
-    <ul>
+    <ul className="mb-11 divide-y divide-orange-500 px-2">
       {menu.map(item => (
-        <MenuItem key={item.id} item={item} />
+        <MenuItem
+          key={item.id}
+          item={item}
+        />
       ))}
     </ul>
   );

@@ -1,5 +1,6 @@
 import type React from 'react';
 import { useState } from 'react';
+import { Button } from '../../ui/Button';
 import Input from '../../ui/Input';
 
 export function CreateUser() {
@@ -10,7 +11,9 @@ export function CreateUser() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col items-center justify-center">
       <p className="mb-4 text-xl font-normal text-stone-800 md:text-2xl">
         🍕 Welcome! Please start by telling us your name:
       </p>
@@ -21,11 +24,7 @@ export function CreateUser() {
         onChange={e => setUsername(e.target.value)}
       />
 
-      {username !== '' && (
-        <div>
-          <button>Start ordering</button>
-        </div>
-      )}
+      {username !== '' && <Button>Start ordering</Button>}
     </form>
   );
 }

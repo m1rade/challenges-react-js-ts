@@ -4,21 +4,21 @@ import { Link, useNavigate } from 'react-router-dom';
 
 interface Props extends LinkProps, React.RefAttributes<HTMLAnchorElement> {
   children: React.ReactNode;
-  type?: 'logo';
+  type?: 'baseType' | 'logo';
 }
 
-const baseStyle = 'text-blue-500 hover:text-blue-600 hover:underline';
 const linkTypes = {
+  baseType: 'text-blue-500 hover:text-blue-600 hover:underline text-lg',
   logo: 'tracking-widest focus-visible:outline-none focus-visible:ring focus-visible:ring-orange-500',
 };
 
-export function StylishLink({ children, type, to, className, ...restProps }: Props) {
+export function StylishLink({ children, type = 'baseType', to, className, ...restProps }: Props) {
   const navigate = useNavigate();
 
   if (to === '-1')
     return (
       <button
-        className={baseStyle}
+        className={linkTypes['baseType']}
         onClick={() => navigate(-1)}>
         {children}
       </button>
@@ -27,7 +27,7 @@ export function StylishLink({ children, type, to, className, ...restProps }: Pro
   return (
     <Link
       to={to}
-      className={type === 'logo' ? linkTypes[type] : baseStyle}
+      className={linkTypes[type]}
       {...restProps}>
       {children}
     </Link>
