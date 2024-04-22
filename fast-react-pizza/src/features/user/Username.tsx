@@ -1,3 +1,9 @@
+import { useAppSelector } from '../../app/hooks';
+
 export function Username() {
-  return <p className="hidden text-sm md:block">Some name</p>
+  const username = useAppSelector(store => store.user.username);
+
+  if (!username) return null;
+
+  return <p className="hidden text-sm md:block">{username}</p>;
 }

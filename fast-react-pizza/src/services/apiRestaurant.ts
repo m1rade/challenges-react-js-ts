@@ -69,14 +69,14 @@ export interface IOrder {
   customer: string;
   status: string;
   priority: boolean;
-  cart: ICartItem[];
+  cart: CartItemDomain[];
   id: string;
   estimatedDelivery: string;
   orderPrice: number;
   priorityPrice: number;
 }
 
-export interface ICartItem {
+export interface CartItemDomain {
   addIngredients?: string[];
   removeIngredients?: string[];
   pizzaId: number;
@@ -91,7 +91,7 @@ export interface OrderDomain {
   customer: string;
   phone: string;
   priority: boolean;
-  cart: ICartItem[];
+  cart: CartItemDomain[];
 }
 
 export interface OrderResponse extends IOrder, OrderDomain {

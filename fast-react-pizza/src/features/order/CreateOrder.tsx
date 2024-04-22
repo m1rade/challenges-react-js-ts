@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import type { ActionFunctionArgs } from 'react-router-dom';
 import { Form, redirect, useActionData, useNavigation } from 'react-router-dom';
+import { useAppSelector } from '../../app/hooks';
 import { apiRestaurant } from '../../services/apiRestaurant';
 import { Button } from '../../ui/Button';
 import Input from '../../ui/Input';
@@ -66,13 +68,19 @@ function isErrorField(actionData: FieldError | Response): actionData is FieldErr
 
 export function CreateOrder() {
   const cart = fakeCart;
+  const username = useAppSelector(store => store.user.username);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
   const actionData = useActionData() as Awaited<ReturnType<typeof action>>;
   const errors = actionData && isErrorField(actionData) ? actionData : null;
 
+  // const [customer, setCustomer] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [priority, setPriority] = useState(false);
+
   return (
-    <div className="mx-3 my-4 md:mx-auto md:w-3/4 lg:w-1/2">
+    <div className="mx-3 mb-11 mt-4 md:mx-auto md:w-3/4 lg:w-1/2">
       <h2 className="mb-8 text-center text-2xl font-semibold">Ready to order? Let's go!</h2>
       <Form method="POST">
         <div className="mb-8 flex flex-col justify-start gap-3 sm:flex-row sm:items-center lg:gap-0">
@@ -87,6 +95,8 @@ export function CreateOrder() {
               id="customer"
               name="customer"
               type="text"
+              defaultValue={username}
+              // onChange={e => setCustomer(e.currentTarget.value.trim())}
               required
             />
           </div>
@@ -103,6 +113,8 @@ export function CreateOrder() {
               id="phone"
               name="phone"
               type="tel"
+              value={phone}
+              onChange={e => setPhone(e.currentTarget.value.trim())}
               required
               error={!!errors}
             />
@@ -121,6 +133,8 @@ export function CreateOrder() {
               id="address"
               name="address"
               type="text"
+              onChange={e => setAddress(e.currentTarget.value.trim())}
+              value={address}
               required
             />
           </div>
@@ -131,6 +145,8 @@ export function CreateOrder() {
             name="priority"
             type="checkbox"
             inputType="checkbox"
+            checked={priority}
+            onChange={e => setPriority(e.currentTarget.checked)}
           />
           <label htmlFor="priority">Want to you give your order priority?</label>
         </div>

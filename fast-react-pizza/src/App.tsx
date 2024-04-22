@@ -1,10 +1,11 @@
-import { Outlet, useNavigation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigation } from 'react-router-dom';
 import { CartOverview } from './features/cart/CartOverview';
 import { Header } from './ui/Header';
 import { Spinner } from './ui/Spinner';
 
 export function App() {
   const navigation = useNavigation();
+  const location = useLocation();
   const isLoading = navigation.state === 'loading';
 
   return (
@@ -17,7 +18,7 @@ export function App() {
         <Outlet />
       </main>
 
-      <CartOverview />
+      {location.pathname !== '/cart' && <CartOverview />}
     </div>
   );
 }

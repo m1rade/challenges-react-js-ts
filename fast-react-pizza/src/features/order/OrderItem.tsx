@@ -1,8 +1,8 @@
-import type { ICartItem } from '../../services/apiRestaurant';
+import type { CartItemDomain } from '../../services/apiRestaurant';
 import { formatCurrency } from '../../utils/helpers';
 
 type Props = {
-  item: ICartItem;
+  item: CartItemDomain;
 };
 export function OrderItem({ item: { name, quantity, totalPrice } }: Props) {
   return (

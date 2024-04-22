@@ -1,9 +1,19 @@
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import type { IMenuItem } from '../../services/apiRestaurant';
 import { Button } from '../../ui/Button';
+import { UpdateItemQuantity } from '../../ui/UpdateItemQuantity';
 import { formatCurrency } from '../../utils/helpers';
+import { addItem, decreaseQuantity, increaseQuantity, makeCurrentQuantityById } from '../cart/cartSlice';
 
 export function MenuItem({ item }: { item: IMenuItem }) {
-  const { imageUrl, ingredients, name, soldOut, unitPrice } = item;
+  const { imageUrl, ingredients, name, soldOut, unitPrice, id } = item;
+  const currentQuantity = useAppSelector(store => makeCurrentQuantityById(store, id));
+  const isInCart = currentQuantity > 0;
+  const dispatch = useAppDispatch();
+
+  const handleBtnClick = () => {
+    dispatch(addItem({ pizzaId: id, name, unitPrice, quantity: 1, totalPrice: unitPrice * 1 }));
+  };
 
   return (
     <li className="flex gap-4 py-2">
@@ -25,7 +35,20 @@ export function MenuItem({ item }: { item: IMenuItem }) {
             <p className="font-medium uppercase text-orange-700 lg:text-lg">Sold out</p>
           )}
 
-          {!soldOut && <Button btnStyle="functional">+</Button>}
+          {!soldOut &&
+            (isInCart ? (
+              <UpdateItemQuantity
+                quantity={currentQuantity}
+                onDecrease={() => dispatch(decreaseQuantity({ id }))}
+                onIncrease={() => dispatch(increaseQuantity({ id }))}
+              />
+            ) : (
+              <Button
+                onClick={handleBtnClick}
+                btnStyle="functional">
+                +
+              </Button>
+            ))}
         </div>
       </div>
     </li>
