@@ -6,6 +6,7 @@ import { CreateOrder } from '../features/order/CreateOrder.tsx';
 import { Order } from '../features/order/Order.tsx';
 import { ErrorPage } from '../ui/ErrorPage.tsx';
 import { Home } from '../ui/Home.tsx';
+import { ProtectedRoute } from './ProtectedRoute.tsx';
 import { Paths } from './paths.ts';
 
 export const router = createBrowserRouter([
@@ -19,22 +20,38 @@ export const router = createBrowserRouter([
       },
       {
         path: '/menu',
-        element: <Menu />,
+        element: (
+          <ProtectedRoute>
+            <Menu />
+          </ProtectedRoute>
+        ),
         loader: Menu.loader,
         errorElement: <ErrorPage />,
       },
       {
         path: '/cart',
-        element: <Cart />,
+        element: (
+          <ProtectedRoute>
+            <Cart />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/order/new',
-        element: <CreateOrder />,
+        element: (
+          <ProtectedRoute>
+            <CreateOrder />
+          </ProtectedRoute>
+        ),
         action: CreateOrder.action,
       },
       {
         path: Paths.orderDetails,
-        element: <Order />,
+        element: (
+          <ProtectedRoute>
+            <Order />
+          </ProtectedRoute>
+        ),
         loader: Order.loader,
         errorElement: <ErrorPage />,
       },
