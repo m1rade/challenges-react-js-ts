@@ -2,36 +2,14 @@ import { useState } from 'react';
 import type { ActionFunctionArgs } from 'react-router-dom';
 import { Form, redirect, useActionData, useNavigation } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
+import { store } from '../../app/store';
 import { apiRestaurant } from '../../services/apiRestaurant';
 import { Button } from '../../ui/Button';
 import Input from '../../ui/Input';
+import { formatCurrency } from '../../utils/helpers';
 import { isValidPhone } from '../../utils/validators';
-
-// Order ids: GWD0UY 8QYJK3
-
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: 'Mediterranean',
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: 'Vegetale',
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: 'Spinach and Mushroom',
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
+import { EmptyCart } from '../cart/EmptyCart';
+import { clearCart, selectCart, selectTotalPrice } from '../cart/cartSlice';
 
 interface OrderFormData {
   address: string;
@@ -59,6 +37,8 @@ const action = async ({ request }: ActionFunctionArgs) => {
     priority: data.priority === 'on',
   });
 
+  store.dispatch(clearCart());
+
   return redirect(`/order/${newOrder.id}`);
 };
 
@@ -67,17 +47,18 @@ function isErrorField(actionData: FieldError | Response): actionData is FieldErr
 }
 
 export function CreateOrder() {
-  const cart = fakeCart;
   const username = useAppSelector(store => store.user.username);
+  const cart = useAppSelector(selectCart);
+  const [priority, setPriority] = useState(false);
+  const totalCartPrice = useAppSelector(selectTotalPrice);
+  const finalPrice = priority ? totalCartPrice + totalCartPrice * 0.2 : totalCartPrice;
+
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
   const actionData = useActionData() as Awaited<ReturnType<typeof action>>;
   const errors = actionData && isErrorField(actionData) ? actionData : null;
 
-  // const [customer, setCustomer] = useState('');
-  const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
-  const [priority, setPriority] = useState(false);
+  if (!cart.length) return <EmptyCart />;
 
   return (
     <div className="mx-3 mb-11 mt-4 md:mx-auto md:w-3/4 lg:w-1/2">
@@ -96,7 +77,6 @@ export function CreateOrder() {
               name="customer"
               type="text"
               defaultValue={username}
-              // onChange={e => setCustomer(e.currentTarget.value.trim())}
               required
             />
           </div>
@@ -113,8 +93,6 @@ export function CreateOrder() {
               id="phone"
               name="phone"
               type="tel"
-              value={phone}
-              onChange={e => setPhone(e.currentTarget.value.trim())}
               required
               error={!!errors}
             />
@@ -133,8 +111,6 @@ export function CreateOrder() {
               id="address"
               name="address"
               type="text"
-              onChange={e => setAddress(e.currentTarget.value.trim())}
-              value={address}
               required
             />
           </div>
@@ -144,9 +120,9 @@ export function CreateOrder() {
             id="priority"
             name="priority"
             type="checkbox"
-            inputType="checkbox"
             checked={priority}
             onChange={e => setPriority(e.currentTarget.checked)}
+            inputType="checkbox"
           />
           <label htmlFor="priority">Want to you give your order priority?</label>
         </div>
@@ -160,7 +136,7 @@ export function CreateOrder() {
             <Button
               type="submit"
               disabled={isSubmitting}>
-              {isSubmitting ? 'Ordering...' : 'Order'}
+              {isSubmitting ? 'Ordering...' : `Order for  ${formatCurrency(finalPrice)}`}
             </Button>
           </div>
         </div>
