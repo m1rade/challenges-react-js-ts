@@ -1,7 +1,8 @@
+import type React from 'react';
 import { useState } from 'react';
 import type { ActionFunctionArgs } from 'react-router-dom';
 import { Form, redirect, useActionData, useNavigation } from 'react-router-dom';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { store } from '../../app/store';
 import { apiRestaurant } from '../../services/apiRestaurant';
 import { Button } from '../../ui/Button';
@@ -10,6 +11,7 @@ import { formatCurrency } from '../../utils/helpers';
 import { isValidPhone } from '../../utils/validators';
 import { EmptyCart } from '../cart/EmptyCart';
 import { clearCart, selectCart, selectTotalPrice } from '../cart/cartSlice';
+import { fetchAddress } from '../user/userSlice';
 
 interface OrderFormData {
   address: string;
@@ -47,8 +49,8 @@ function isErrorField(actionData: FieldError | Response): actionData is FieldErr
 }
 
 export function CreateOrder() {
-  const username = useAppSelector(store => store.user.username);
   const cart = useAppSelector(selectCart);
+  const { address, status: addressStatus, username, error: addressError } = useAppSelector(state => state.user);
   const [priority, setPriority] = useState(false);
   const totalCartPrice = useAppSelector(selectTotalPrice);
   const finalPrice = priority ? totalCartPrice + totalCartPrice * 0.2 : totalCartPrice;
@@ -57,6 +59,14 @@ export function CreateOrder() {
   const isSubmitting = navigation.state === 'submitting';
   const actionData = useActionData() as Awaited<ReturnType<typeof action>>;
   const errors = actionData && isErrorField(actionData) ? actionData : null;
+
+  const dispatch = useAppDispatch();
+
+  const handleOnLocationClick: React.MouseEventHandler<HTMLButtonElement> = e => {
+    e.preventDefault();
+
+    dispatch(fetchAddress());
+  };
 
   if (!cart.length) return <EmptyCart />;
 
@@ -105,14 +115,27 @@ export function CreateOrder() {
             className="sm:basis-40">
             Address
           </label>
-          <div className="grow">
-            <Input
-              inputType="form"
-              id="address"
-              name="address"
-              type="text"
-              required
-            />
+          <div className="relative grow">
+            <div className="pe-36 lg:pe-44">
+              <Input
+                inputType="form"
+                id="address"
+                name="address"
+                type="text"
+                defaultValue={address}
+                disabled={addressStatus === 'loading'}
+                required
+              />
+              {addressStatus === 'failed' && <p className="mt-2 font-bold text-red-500">{addressError}</p>}
+            </div>
+            <div className="absolute right-0 top-1/2 -translate-y-1/2">
+              <Button
+                onClick={handleOnLocationClick}
+                disabled={addressStatus === 'loading'}
+                btnStyle="small">
+                {addressStatus === 'loading' ? 'Locating...' : '📍 Locate me'}
+              </Button>
+            </div>
           </div>
         </div>
         <div className="mb-8 flex items-center justify-start gap-5 lg:justify-end">
@@ -126,16 +149,18 @@ export function CreateOrder() {
           />
           <label htmlFor="priority">Want to you give your order priority?</label>
         </div>
+
         <div>
           <input
             type="hidden"
             name="cart"
             value={JSON.stringify(cart)}
           />
+
           <div className="text-end">
             <Button
               type="submit"
-              disabled={isSubmitting}>
+              disabled={isSubmitting || addressStatus === 'loading'}>
               {isSubmitting ? 'Ordering...' : `Order for  ${formatCurrency(finalPrice)}`}
             </Button>
           </div>
