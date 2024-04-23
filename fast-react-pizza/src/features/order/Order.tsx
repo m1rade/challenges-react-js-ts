@@ -1,22 +1,37 @@
+import { useEffect } from 'react';
 import type { LoaderFunctionArgs, ParamParseKey, Params } from 'react-router-dom';
-import { useLoaderData } from 'react-router-dom';
+import { useFetcher, useLoaderData } from 'react-router-dom';
 import type { Paths } from '../../routes/paths';
+import type { IMenuItem } from '../../services/apiRestaurant';
 import { apiRestaurant } from '../../services/apiRestaurant';
+import { Button } from '../../ui/Button';
 import { calcMinutesLeft, formatCurrency, formatDate } from '../../utils/helpers';
 import { OrderItem } from './OrderItem';
 
-interface LoaderArgs extends LoaderFunctionArgs {
+interface ActionArgs extends LoaderFunctionArgs {
   params: Params<ParamParseKey<typeof Paths.orderDetails>>;
 }
 
-const loader = async ({ params }: LoaderArgs) => await apiRestaurant.getOrder(params.orderId ?? '');
+const loader = async ({ params }: ActionArgs) => await apiRestaurant.getOrder(params.orderId ?? '');
+
+const action = async ({ params }: ActionArgs) => {
+  await apiRestaurant.updateOrder(params.orderId ?? '', { priority: true });
+  return null;
+};
 
 export function Order() {
   const order = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  const fetcher = useFetcher<IMenuItem[]>();
+  const fetcherIsLoading = fetcher.state === 'loading';
+  const fetcherIsSubmitting = fetcher.state === 'submitting';
 
   const { estimatedDelivery, orderPrice, priority, priorityPrice, status, id, cart } = order;
 
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
+
+  useEffect(() => {
+    if (!fetcher.data && fetcher.state === 'idle') fetcher.load('/menu');
+  }, [fetcher]);
 
   return (
     <div className="mx-2 my-7 space-y-8">
@@ -35,7 +50,7 @@ export function Order() {
         </div>
       </div>
 
-      <div className="mx-auto flex flex-wrap items-center justify-between gap-2 bg-stone-50 px-8 py-4 lg:w-10/12">
+      <div className="mx-auto flex w-full flex-wrap items-center justify-between gap-2 bg-stone-50 px-8 py-4 sm:w-5/6 md:w-4/6 lg:w-1/2">
         <p className="font-medium">
           {deliveryIn >= 0 ? `Only ${deliveryIn} minutes left 😃` : 'Order should have arrived'}
         </p>
@@ -48,6 +63,8 @@ export function Order() {
             <OrderItem
               key={item.pizzaId}
               item={item}
+              ingredients={fetcher.data?.find(menuItem => menuItem.id === item.pizzaId)?.ingredients}
+              isIngredientsLoading={fetcherIsLoading}
             />
           ))}
         </ul>
@@ -64,8 +81,17 @@ export function Order() {
           </p>
         </div>
       </div>
+
+      {!priority && (
+        <fetcher.Form
+          method="PATCH"
+          className="mx-auto w-full text-end sm:w-5/6 md:w-4/6 lg:w-1/2">
+          <Button disabled={fetcherIsSubmitting}>{fetcherIsSubmitting ? 'Making...' : 'Make priority'}</Button>
+        </fetcher.Form>
+      )}
     </div>
   );
 }
 
 Order.loader = loader;
+Order.action = action;

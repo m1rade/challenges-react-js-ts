@@ -38,11 +38,11 @@ export const apiRestaurant = {
     }
   },
 
-  async updateOrder(id: string, updateObj: unknown) {
+  async updateOrder(id: string, dataToUpdate: Partial<IOrder>) {
     try {
       const res = await fetch(`${API_URL}/order/${id}`, {
         method: 'PATCH',
-        body: JSON.stringify(updateObj),
+        body: JSON.stringify(dataToUpdate),
         headers: {
           'Content-Type': 'application/json',
         },

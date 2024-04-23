@@ -47,12 +47,9 @@ export const router = createBrowserRouter([
       },
       {
         path: Paths.orderDetails,
-        element: (
-          <ProtectedRoute>
-            <Order />
-          </ProtectedRoute>
-        ),
+        element: <Order />,
         loader: Order.loader,
+        action: Order.action,
         errorElement: <ErrorPage />,
       },
     ],
