@@ -82,7 +82,7 @@ export function Order() {
         </div>
       </div>
 
-      {!priority && (
+      {!priority && order.status === 'preparing' && (
         <fetcher.Form
           method="PATCH"
           className="mx-auto w-full text-end sm:w-5/6 md:w-4/6 lg:w-1/2">

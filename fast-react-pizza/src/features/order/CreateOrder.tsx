@@ -7,6 +7,7 @@ import { store } from '../../app/store';
 import { apiRestaurant } from '../../services/apiRestaurant';
 import { Button } from '../../ui/Button';
 import Input from '../../ui/Input';
+import { StylishLink } from '../../ui/StylishLink';
 import { formatCurrency } from '../../utils/helpers';
 import { isValidPhone } from '../../utils/validators';
 import { EmptyCart } from '../cart/EmptyCart';
@@ -72,12 +73,14 @@ export function CreateOrder() {
 
   return (
     <div className="mx-3 mb-11 mt-4 md:mx-auto md:w-3/4 lg:w-1/2">
-      <h2 className="mb-8 text-center text-2xl font-semibold">Ready to order? Let's go!</h2>
+      <StylishLink to="/cart">&larr; Back to cart</StylishLink>
+
+      <h2 className="mb-8 mt-4 text-center text-2xl font-semibold">Ready to order? Let's go!</h2>
       <Form method="POST">
         <div className="mb-8 flex flex-col justify-start gap-3 sm:flex-row sm:items-center lg:gap-0">
           <label
             htmlFor="customer"
-            className="sm:basis-40">
+            className="self-start sm:basis-40">
             First Name
           </label>
           <div className="grow">
@@ -94,7 +97,7 @@ export function CreateOrder() {
         <div className="mb-8 flex flex-col justify-start gap-3 sm:flex-row sm:items-center lg:gap-0">
           <label
             htmlFor="phone"
-            className="sm:basis-40">
+            className="self-start sm:basis-40">
             Phone number
           </label>
           <div className="grow">
@@ -112,11 +115,11 @@ export function CreateOrder() {
         <div className="mb-8 flex flex-col justify-start gap-3 sm:flex-row sm:items-center lg:gap-0">
           <label
             htmlFor="address"
-            className="sm:basis-40">
+            className="self-start sm:basis-40">
             Address
           </label>
-          <div className="relative grow">
-            <div className="pe-36 lg:pe-44">
+          <div className="flex grow flex-wrap items-center gap-3">
+            <div className="grow">
               <Input
                 inputType="form"
                 id="address"
@@ -128,7 +131,7 @@ export function CreateOrder() {
               />
               {addressStatus === 'failed' && <p className="mt-2 font-bold text-red-500">{addressError}</p>}
             </div>
-            <div className="absolute right-0 top-1/2 -translate-y-1/2">
+            <div className="">
               <Button
                 onClick={handleOnLocationClick}
                 disabled={addressStatus === 'loading'}

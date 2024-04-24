@@ -11,7 +11,7 @@ export default function CartItem({ item: { name, quantity, totalPrice, pizzaId }
   const dispatch = useAppDispatch();
 
   return (
-    <li className="md: py-2 md:flex md:items-center md:justify-between">
+    <li className="md:flex md:items-center md:justify-between md:py-2">
       <p className="mb-3 md:mb-0">
         <span className="text-lg">{quantity}</span> &times; {name}
       </p>

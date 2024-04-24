@@ -28,7 +28,7 @@ export function MenuItem({ item }: { item: IMenuItem }) {
           className={`text-sm capitalize italic text-stone-700 md:text-base ${soldOut ? 'text-stone-500 text-opacity-80' : ''}`}>
           {ingredients.join(', ')}
         </p>
-        <div className="mt-auto flex items-center justify-between">
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-2">
           {!soldOut ? (
             <p className="lg:text-lg">{formatCurrency(unitPrice)}</p>
           ) : (
