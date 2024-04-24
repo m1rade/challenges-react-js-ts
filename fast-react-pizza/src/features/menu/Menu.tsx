@@ -8,7 +8,7 @@ export function Menu() {
   const menu = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
-    <ul className="mb-11 divide-y divide-orange-500 px-2">
+    <ul className="mb-11 grid grid-cols-1 divide-y divide-orange-500 px-2 md:grid-cols-2 md:gap-x-6 lg:px-8">
       {menu.map(item => (
         <MenuItem
           key={item.id}

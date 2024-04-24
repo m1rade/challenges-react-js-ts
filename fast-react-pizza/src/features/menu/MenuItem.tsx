@@ -16,7 +16,7 @@ export function MenuItem({ item }: { item: IMenuItem }) {
   };
 
   return (
-    <li className="flex gap-4 py-2">
+    <li className="flex gap-4 py-2 transition-all duration-300 hover:bg-yellow-200">
       <img
         src={imageUrl}
         alt={name}
