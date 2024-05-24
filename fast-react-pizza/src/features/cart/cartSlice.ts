@@ -44,7 +44,7 @@ const cartSlice = createSlice({
     selectTotalPrice: state => state.cart.reduce((acc, curr) => acc + curr.totalPrice, 0),
     selectCart: state => state.cart,
     makeCurrentQuantityById: createSelector(
-      [(state: CartState) => state.cart, (state: CartState, itemId: number) => itemId],
+      [(state: CartState) => state.cart, (_: CartState, itemId: number) => itemId],
       (cart, itemId) => {
         const item = cart.find(c => c.pizzaId === itemId);
         if (!item) return 0;
