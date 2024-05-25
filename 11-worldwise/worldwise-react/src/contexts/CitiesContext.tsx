@@ -4,7 +4,7 @@ import { CityType } from '../types/data';
 import { sleep } from '../utils/sleep';
 import { citiesReducer } from './citiesReducer';
 
-const BASE_URL = 'http://localhost:5172';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const CitiesContext = createContext<CitiesContextType | null>(null);
 
